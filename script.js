@@ -1,5 +1,5 @@
 /* ============================================================
-   四季大人 · 生日网站 交互
+   中秋 · 花好月圆 交互
    纯原生 JS，无依赖
    ============================================================ */
 (function () {
@@ -7,18 +7,20 @@
 
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    /* ---------- 进场撒花 ---------- */
+    /* ---------- 进场撒桂 ---------- */
     window.setTimeout(function () {
-        burst(window.innerWidth / 2, window.innerHeight * 0.42, 110);
-    }, 700);
+        burst(window.innerWidth / 2, window.innerHeight * 0.4, 90);
+    }, 800);
 
-    /* ---------- 星空背景 ---------- */
-    var canvas = document.getElementById("stars");
+    /* ---------- 夜空：星子 + 常驻落桂 ---------- */
+    var canvas = document.getElementById("sky");
     var ctx = canvas.getContext("2d");
     var stars = [];
+    var petals = [];
     var w = 0,
         h = 0,
-        dpr = 1;
+        dpr = 1,
+        t = 0;
 
     function sizeCanvas() {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -28,48 +30,110 @@
         canvas.height = Math.floor(h * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         buildStars();
+        buildPetals();
     }
 
     function buildStars() {
         stars = [];
-        var count = Math.min(Math.round((w * h) / 9000), 190);
+        var count = Math.min(Math.round((w * h) / 10000), 170);
         for (var i = 0; i < count; i++) {
             stars.push({
                 x: Math.random() * w,
-                y: Math.random() * h,
-                r: Math.random() * 1.5 + 0.35,
-                a: Math.random() * 0.65 + 0.18,
+                y: Math.random() * h * 0.85,
+                r: Math.random() * 1.45 + 0.3,
+                a: Math.random() * 0.6 + 0.16,
                 sp: Math.random() * 0.018 + 0.004,
                 ph: Math.random() * Math.PI * 2
             });
         }
     }
 
-    var t = 0;
-    function drawStars() {
+    function buildPetals() {
+        petals = [];
+        var count = Math.min(Math.round(w / 26), 42);
+        for (var i = 0; i < count; i++) {
+            petals.push(makePetal(Math.random() * -h));
+        }
+    }
+
+    function makePetal(y) {
+        return {
+            x: Math.random() * w,
+            y: y,
+            r: Math.random() * 2.6 + 1.9,
+            vy: Math.random() * 0.34 + 0.16,
+            sway: Math.random() * 1.3 + 0.5,
+            ph: Math.random() * Math.PI * 2,
+            rot: Math.random() * Math.PI * 2,
+            vr: (Math.random() - 0.5) * 0.012,
+            a: Math.random() * 0.22 + 0.1,
+            c: Math.random() < 0.32 ? "#F6F1E2" : "#E3B84B"
+        };
+    }
+
+    /* 一朵五瓣桂花 */
+    function drawPetal(c, x, y, r, rot, color, alpha) {
+        c.save();
+        c.globalAlpha = alpha;
+        c.translate(x, y);
+        c.rotate(rot);
+        c.fillStyle = color;
+        for (var k = 0; k < 5; k++) {
+            c.beginPath();
+            c.ellipse(0, -r * 0.62, r * 0.42, r * 0.68, 0, 0, Math.PI * 2);
+            c.fill();
+            c.rotate((Math.PI * 2) / 5);
+        }
+        c.beginPath();
+        c.arc(0, 0, r * 0.2, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+    }
+
+    function drawSky() {
         ctx.clearRect(0, 0, w, h);
+
+        // 星子
         for (var i = 0; i < stars.length; i++) {
             var s = stars[i];
             var alpha = s.a * (0.55 + 0.45 * Math.sin(t * s.sp * 60 + s.ph));
             ctx.beginPath();
             ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(245,241,232," + alpha.toFixed(3) + ")";
+            ctx.fillStyle = "rgba(246,241,226," + alpha.toFixed(3) + ")";
             ctx.fill();
         }
+
+        // 落桂
+        for (var j = 0; j < petals.length; j++) {
+            var p = petals[j];
+            p.y += p.vy;
+            p.ph += 0.014;
+            p.x += Math.sin(p.ph) * p.sway * 0.35;
+            p.rot += p.vr;
+            if (p.y - 20 > h) {
+                petals[j] = makePetal(-20);
+            }
+            drawPetal(ctx, p.x, p.y, p.r, p.rot, p.c, p.a);
+        }
+
         t += 1;
-        requestAnimationFrame(drawStars);
+        requestAnimationFrame(drawSky);
     }
 
     sizeCanvas();
     if (!reduced) {
-        drawStars();
+        drawSky();
     } else {
-        ctx.clearRect(0, 0, w, h);
+        // 静态帧：画出星子与落桂，不留空
         for (var si = 0; si < stars.length; si++) {
             ctx.beginPath();
             ctx.arc(stars[si].x, stars[si].y, stars[si].r, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(245,241,232," + stars[si].a + ")";
+            ctx.fillStyle = "rgba(246,241,226," + stars[si].a + ")";
             ctx.fill();
+        }
+        for (var pi = 0; pi < petals.length; pi++) {
+            var pp = petals[pi];
+            drawPetal(ctx, pp.x, pp.y, pp.r, pp.rot, pp.c, pp.a);
         }
     }
     window.addEventListener("resize", sizeCanvas);
@@ -102,8 +166,9 @@
         });
     }
 
-    /* ---------- 阅读进度 + 导航高亮 ---------- */
+    /* ---------- 阅读进度 · 导航高亮 · 月亮升起 ---------- */
     var readBar = document.getElementById("readBar");
+    var moon = document.querySelector(".moon-halo");
     var dots = Array.prototype.slice.call(document.querySelectorAll(".dot"));
     var sections = dots.map(function (d) {
         return document.getElementById(d.getAttribute("data-target"));
@@ -111,8 +176,14 @@
 
     function onScroll() {
         var max = document.documentElement.scrollHeight - window.innerHeight;
-        var p = max > 0 ? (window.scrollY / max) * 100 : 0;
-        readBar.style.width = p.toFixed(2) + "%";
+        var p = max > 0 ? window.scrollY / max : 0;
+        readBar.style.width = (p * 100).toFixed(2) + "%";
+
+        // 月随阅读缓缓升起、渐近（减弱动效时保持静止）
+        if (moon && !reduced) {
+            moon.style.setProperty("--moon-y", (-p * window.innerHeight * 0.3).toFixed(1) + "px");
+            moon.style.setProperty("--moon-scale", (1 + p * 0.14).toFixed(3));
+        }
 
         var mid = window.scrollY + window.innerHeight * 0.42;
         var idx = 0;
@@ -134,7 +205,7 @@
         });
     });
 
-    /* ---------- 验证码复制 ---------- */
+    /* ---------- 口令复制 ---------- */
     var copyBtn = document.getElementById("copyCode");
     var codeValue = document.getElementById("codeValue");
 
@@ -172,116 +243,22 @@
         }
     });
 
-    /* ---------- 吹蜡烛 ---------- */
-    var cake = document.querySelector(".cake");
-    var flame = document.getElementById("flame");
-    var flameCore = document.getElementById("flameCore");
-    var blowBtn = document.getElementById("blowBtn");
-    var blowCount = document.getElementById("blowCount");
-    var count = 0;
-    var lit = true;
-
-    blowBtn.addEventListener("click", function () {
-        var rect = cake.getBoundingClientRect();
-
-        if (lit) {
-            lit = false;
-            cake.classList.add("blown");
-            blowBtn.textContent = "点 蜡 烛";
-            count++;
-            blowCount.textContent = count;
-            burst(rect.left + rect.width / 2, rect.top + rect.height * 0.16, 140);
-        } else {
-            lit = true;
-            cake.classList.remove("blown");
-            blowBtn.textContent = "把 蜡 烛 吹 了";
-            // 重绘一次火光动画
-            [flame, flameCore].forEach(function (f) {
-                f.style.animation = "none";
-                void f.getBoundingClientRect();
-                f.style.animation = "";
-            });
-        }
-    });
-
-    /* ---------- 愿望清单 ---------- */
-    var STORE = "season_birthday_wishes";
-    var wishInput = document.getElementById("wishInput");
-    var wishSend = document.getElementById("wishSend");
-    var wishList = document.getElementById("wishList");
-
-    function loadWishes() {
-        try {
-            return JSON.parse(localStorage.getItem(STORE) || "[]");
-        } catch (e) {
-            return [];
-        }
-    }
-
-    function saveWishes(list) {
-        try {
-            localStorage.setItem(STORE, JSON.stringify(list.slice(-30)));
-        } catch (e) {
-            /* 隐私模式下忽略 */
-        }
-    }
-
-    function renderWishes() {
-        var list = loadWishes();
-        wishList.innerHTML = "";
-        list.slice()
-            .reverse()
-            .forEach(function (text) {
-                var li = document.createElement("li");
-                li.textContent = text;
-                wishList.appendChild(li);
-            });
-    }
-
-    function addWish() {
-        var text = wishInput.value.trim();
-        if (!text) {
-            wishInput.focus();
-            wishInput.classList.add("shake");
-            setTimeout(function () {
-                wishInput.classList.remove("shake");
-            }, 420);
-            return;
-        }
-        var list = loadWishes();
-        list.push(text);
-        saveWishes(list);
-        wishInput.value = "";
-        renderWishes();
-
-        var rect = wishSend.getBoundingClientRect();
-        burst(rect.left + rect.width / 2, rect.top, 40);
-    }
-
-    wishSend.addEventListener("click", addWish);
-    wishInput.addEventListener("keydown", function (e) {
-        if (e.key === "Enter") addWish();
-    });
-
-    wishInput.classList.add("shake-ready");
-    renderWishes();
-
-    /* ---------- 撒花粒子 ---------- */
-    var cc = document.getElementById("confetti");
+    /* ---------- 桂花迸发 ---------- */
+    var cc = document.getElementById("petals");
     var cx = cc.getContext("2d");
     var parts = [];
     var animating = false;
 
-    function sizeConfetti() {
+    function sizePetals() {
         cc.width = Math.floor(window.innerWidth * Math.min(window.devicePixelRatio || 1, 2));
         cc.height = Math.floor(window.innerHeight * Math.min(window.devicePixelRatio || 1, 2));
         cc.style.width = window.innerWidth + "px";
         cc.style.height = window.innerHeight + "px";
     }
-    sizeConfetti();
-    window.addEventListener("resize", sizeConfetti);
+    sizePetals();
+    window.addEventListener("resize", sizePetals);
 
-    var COLORS = ["#C9A227", "#E8CC6A", "#F5F1E8", "#8C6A3F", "#FFF3C4"];
+    var COLORS = ["#E3B84B", "#F4D97E", "#F6F1E2", "#E8755C", "#C1503F"];
 
     function burst(x, y, n) {
         if (reduced) return;
@@ -295,8 +272,7 @@
                 vx: Math.cos(ang) * spd,
                 vy: Math.sin(ang) * spd - 2.4,
                 g: 0.16,
-                w: (Math.random() * 6 + 3) * dpr,
-                h: (Math.random() * 4 + 2) * dpr,
+                r: (Math.random() * 3.2 + 1.6) * dpr,
                 rot: Math.random() * Math.PI,
                 vr: (Math.random() - 0.5) * 0.24,
                 c: COLORS[(Math.random() * COLORS.length) | 0],
@@ -305,11 +281,11 @@
         }
         if (!animating) {
             animating = true;
-            tickConfetti();
+            tickPetals();
         }
     }
 
-    function tickConfetti() {
+    function tickPetals() {
         cx.clearRect(0, 0, cc.width, cc.height);
 
         for (var i = parts.length - 1; i >= 0; i--) {
@@ -331,27 +307,21 @@
             cx.translate(p.x, p.y);
             cx.rotate(p.rot);
             cx.fillStyle = p.c;
-            cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            cx.beginPath();
+            cx.ellipse(0, 0, p.r, p.r * 0.62, 0, 0, Math.PI * 2);
+            cx.fill();
             cx.restore();
         }
 
         if (parts.length) {
-            requestAnimationFrame(tickConfetti);
+            requestAnimationFrame(tickPetals);
         } else {
             animating = false;
             cx.clearRect(0, 0, cc.width, cc.height);
         }
     }
 
-    /* ---------- 输入框抖动 ---------- */
-    var style = document.createElement("style");
-    style.textContent =
-        "@keyframes shakeX{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}" +
-        "40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}" +
-        ".wish-input.shake{border-color:rgba(255,120,120,.75)!important;animation:shakeX .42s ease}";
-    document.head.appendChild(style);
-
-    /* ---------- 页面隐藏时停掉撒花 ---------- */
+    /* ---------- 页面隐藏时停掉迸发 ---------- */
     document.addEventListener("visibilitychange", function () {
         if (document.hidden) {
             parts.length = 0;

@@ -1,21 +1,28 @@
 /* ============================================================
-   四季大人 · 生日网站
-   配色取自头像：暖金 #C9A227 / 米白 #F5F1E8 / 暗夜 #14161A
+   中秋 · 花好月圆
+   配色取自秋夜：夜空靛蓝 #0A101E / 月华白 #F6F1E2
+   桂花金 #E3B84B / 灯盏朱砂 #C1503F
    ============================================================ */
 
 :root{
-  --gold:#C9A227;
-  --gold-lt:#E8CC6A;
-  --gold-dp:#8C6A3F;
-  --cream:#F5F1E8;
-  --ink:#14161A;
-  --ink-2:#1C1F26;
-  --ink-3:#2A2E38;
-  --muted:rgba(245,241,232,.62);
-  --muted-2:rgba(245,241,232,.38);
-  --line:rgba(201,162,39,.22);
+  /* 夜空 */
+  --night:#0A101E;
 
-  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif SC",Georgia,serif;
+  /* 月华 */
+  --moon:#F6F1E2;
+  --moon-lt:#FFFDF5;
+  --moon-dim:rgba(246,241,226,.56);
+  --moon-faint:rgba(246,241,226,.42);
+
+  /* 桂花与灯火（朱砂 #C1503F 用于灯笼本体，见内联 SVG） */
+  --osmanthus:#E3B84B;
+  --osmanthus-lt:#F4D97E;
+  --osmanthus-dp:#9A7326;
+  --jade:#8FB3D6;
+
+  --line:rgba(227,184,75,.22);
+
+  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif SC","SimSun",Georgia,serif;
   --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,-apple-system,sans-serif;
 
   --ease:cubic-bezier(.22,1,.36,1);
@@ -26,8 +33,8 @@
 html{scroll-behavior:smooth}
 
 body{
-  background:var(--ink);
-  color:var(--cream);
+  background:var(--night);
+  color:var(--moon);
   font-family:var(--sans);
   line-height:1.8;
   overflow-x:hidden;
@@ -37,33 +44,56 @@ body{
 img{display:block;max-width:100%}
 button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 
-::selection{background:var(--gold);color:var(--ink)}
+::selection{background:var(--osmanthus);color:var(--night)}
+
+:focus-visible{
+  outline:2px solid var(--osmanthus-lt);
+  outline-offset:3px;border-radius:4px;
+}
 
 /* ---------- 背景 ---------- */
 .bg-fixed{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
 
-#stars{position:absolute;inset:0;width:100%;height:100%}
+#sky{position:absolute;inset:0;width:100%;height:100%}
 
-.aurora{
+/* 月晕：随滚动升起的满月 */
+.moon-halo{
+  --moon-y:0px;
+  --moon-scale:1;
+  position:absolute;left:50%;top:30%;
+  width:min(78vw,620px);aspect-ratio:1;border-radius:50%;
+  transform:translate(-50%,calc(-50% + var(--moon-y))) scale(var(--moon-scale));
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(246,241,226,.10) 0%,
+      rgba(246,241,226,.055) 26%,
+      rgba(143,179,214,.05) 44%,
+      transparent 68%);
+  filter:blur(28px);
+  will-change:transform;
+}
+
+/* 云影 */
+.cloud{
   position:absolute;border-radius:50%;
-  filter:blur(90px);opacity:.5;
+  filter:blur(70px);opacity:.36;
 }
-.aurora-a{
-  width:60vw;height:60vw;left:-18vw;top:-22vw;
-  background:radial-gradient(circle,rgba(201,162,39,.34),transparent 68%);
-  animation:float1 22s var(--ease) infinite alternate;
+.cloud-a{
+  width:70vw;height:26vw;left:-24vw;top:16vh;
+  background:radial-gradient(ellipse,rgba(24,36,68,.95),transparent 70%);
+  animation:drift1 46s linear infinite alternate;
 }
-.aurora-b{
-  width:52vw;height:52vw;right:-16vw;bottom:-18vw;
-  background:radial-gradient(circle,rgba(140,106,63,.34),transparent 68%);
-  animation:float2 28s var(--ease) infinite alternate;
+.cloud-b{
+  width:58vw;height:22vw;right:-20vw;top:56vh;
+  background:radial-gradient(ellipse,rgba(16,26,46,.95),transparent 70%);
+  animation:drift2 62s linear infinite alternate;
 }
-@keyframes float1{to{transform:translate3d(6vw,5vw,0) scale(1.12)}}
-@keyframes float2{to{transform:translate3d(-6vw,-5vw,0) scale(1.16)}}
+@keyframes drift1{to{transform:translate3d(16vw,3vh,0) scale(1.1)}}
+@keyframes drift2{to{transform:translate3d(-14vw,-4vh,0) scale(1.14)}}
 
 .grain{
   position:absolute;inset:-50%;
-  opacity:.035;
+  opacity:.03;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
   animation:grainMove 8s steps(6) infinite;
 }
@@ -78,12 +108,12 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 /* ---------- 阅读进度 ---------- */
 .read-progress{
   position:fixed;top:0;left:0;right:0;height:2px;z-index:120;
-  background:rgba(245,241,232,.07);
+  background:rgba(246,241,226,.07);
 }
 .read-bar{
   height:100%;width:0;
-  background:linear-gradient(90deg,var(--gold-dp),var(--gold-lt));
-  box-shadow:0 0 14px rgba(201,162,39,.7);
+  background:linear-gradient(90deg,var(--osmanthus-dp),var(--osmanthus-lt));
+  box-shadow:0 0 14px rgba(227,184,75,.7);
   transition:width .12s linear;
 }
 
@@ -94,20 +124,21 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 }
 .dot{
   position:relative;width:9px;height:9px;border-radius:50%;
-  background:rgba(245,241,232,.22);
+  background:rgba(246,241,226,.22);
   transition:.4s var(--ease);
 }
 .dot span{
   position:absolute;right:20px;top:50%;transform:translateY(-50%);
-  font-size:11px;letter-spacing:.18em;white-space:nowrap;
-  color:var(--muted);opacity:0;transition:.35s var(--ease);
+  font-family:var(--serif);
+  font-size:12px;letter-spacing:.18em;white-space:nowrap;
+  color:var(--moon-dim);opacity:0;transition:.35s var(--ease);
   pointer-events:none;
 }
-.dot:hover{background:var(--gold);transform:scale(1.3)}
+.dot:hover{background:var(--osmanthus);transform:scale(1.3)}
 .dot:hover span{opacity:1;right:24px}
 .dot.is-active{
-  background:var(--gold);
-  box-shadow:0 0 0 4px rgba(201,162,39,.16),0 0 16px rgba(201,162,39,.7);
+  background:var(--osmanthus);
+  box-shadow:0 0 0 4px rgba(227,184,75,.16),0 0 16px rgba(227,184,75,.7);
   transform:scale(1.25);
 }
 
@@ -120,7 +151,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .sec-head{text-align:center;margin-bottom:clamp(38px,6vh,62px)}
 .sec-no{
   display:inline-block;font-size:11px;letter-spacing:.4em;
-  color:var(--gold);margin-bottom:12px;
+  color:var(--osmanthus);margin-bottom:12px;
 }
 .sec-title{
   font-family:var(--serif);font-weight:500;
@@ -129,11 +160,11 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 }
 .sec-title::after{
   content:"";display:block;width:44px;height:1px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  background:linear-gradient(90deg,transparent,var(--osmanthus),transparent);
   margin:18px auto 0;
 }
 .sec-desc{
-  margin-top:14px;font-size:13.5px;letter-spacing:.1em;color:var(--muted);
+  margin-top:14px;font-size:13.5px;letter-spacing:.1em;color:var(--moon-dim);
 }
 
 /* ---------- 首屏 ---------- */
@@ -141,24 +172,28 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   min-height:100svh;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;gap:0;
-  padding-top:clamp(60px,10vh,90px);
-  padding-bottom:clamp(60px,10vh,90px);
+  padding-top:clamp(48px,8vh,72px);
+  padding-bottom:clamp(48px,8vh,72px);
 }
 .hero-glow{
   position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);
   width:min(74vw,640px);aspect-ratio:1;border-radius:50%;
-  background:radial-gradient(circle,rgba(201,162,39,.18),transparent 66%);
+  background:radial-gradient(circle,rgba(246,241,226,.14),transparent 66%);
   filter:blur(48px);pointer-events:none;
 }
 
+/* 月中人头像 */
 .avatar-wrap{
-  position:relative;width:clamp(140px,29vw,196px);aspect-ratio:1;
-  margin-bottom:clamp(26px,4vh,38px);
+  position:relative;width:clamp(132px,26vw,182px);aspect-ratio:1;
+  margin-bottom:clamp(18px,3vh,28px);
 }
 .avatar{
   width:100%;height:100%;object-fit:cover;border-radius:50%;
-  border:2px solid rgba(201,162,39,.5);
-  box-shadow:0 18px 54px rgba(0,0,0,.55),0 0 0 8px rgba(201,162,39,.06);
+  border:2px solid rgba(246,241,226,.5);
+  box-shadow:
+    0 0 0 8px rgba(246,241,226,.05),
+    0 0 46px rgba(246,241,226,.22),
+    0 18px 54px rgba(0,0,0,.6);
   position:relative;z-index:2;
   transition:transform .7s var(--ease);
 }
@@ -166,74 +201,66 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 
 .avatar-ring{
   position:absolute;inset:-16px;border-radius:50%;
-  border:1px solid rgba(201,162,39,.34);
-  animation:spin 18s linear infinite;
+  border:1px solid rgba(246,241,226,.3);
+  animation:spin 26s linear infinite;
 }
 .avatar-ring::after{
   content:"";position:absolute;top:-3px;left:50%;
   width:6px;height:6px;border-radius:50%;
-  background:var(--gold-lt);
-  box-shadow:0 0 12px var(--gold);
+  background:var(--osmanthus-lt);
+  box-shadow:0 0 12px var(--osmanthus);
   transform:translateX(-50%);
 }
 .ring-2{
   inset:-30px;border-style:dashed;
-  border-color:rgba(201,162,39,.18);
-  animation-duration:34s;animation-direction:reverse;
+  border-color:rgba(143,179,214,.22);
+  animation-duration:44s;animation-direction:reverse;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* 蜡烛火光 */
-.flame{
-  position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);
-  z-index:3;width:16px;height:22px;
+/* 月晕呼吸 */
+.halo-pulse{
+  position:absolute;inset:-8px;border-radius:50%;z-index:3;
+  box-shadow:0 0 40px 6px rgba(246,241,226,.24);
+  animation:moonBreath 5.5s ease-in-out infinite;
+  pointer-events:none;
 }
-.flame i{
-  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
-  border-radius:50% 50% 46% 46%;
-  background:radial-gradient(circle at 50% 72%,#FFF6D8,#FFC04D 42%,#FF8A2B 72%,transparent 76%);
-  animation:flicker 1.5s ease-in-out infinite alternate;
-}
-.flame i:nth-child(1){width:14px;height:20px;opacity:.95}
-.flame i:nth-child(2){width:22px;height:28px;opacity:.4;animation-delay:.2s;filter:blur(2px)}
-.flame i:nth-child(3){width:32px;height:38px;opacity:.18;animation-delay:.4s;filter:blur(6px)}
-@keyframes flicker{
-  0%{transform:translateX(-50%) scale(1) translateY(0)}
-  50%{transform:translateX(-52%) scale(1.08,.94) translateY(-1px)}
-  100%{transform:translateX(-48%) scale(.94,1.08) translateY(1px)}
+@keyframes moonBreath{
+  0%,100%{opacity:.5;transform:scale(1)}
+  50%{opacity:.95;transform:scale(1.03)}
 }
 
 .eyebrow{
   font-size:11.5px;letter-spacing:.5em;text-indent:.5em;
-  color:var(--gold);margin-bottom:16px;
+  color:var(--osmanthus);margin-bottom:12px;
 }
 .hero-title{
-  /* flex 让源码里的换行/缩进空白不再参与渲染（四季·映姬 之间不会多出空格） */
+  /* flex 让源码里的换行/缩进空白不再参与渲染（花好·月圆 之间不会多出空格） */
   display:flex;justify-content:center;align-items:baseline;
   font-family:var(--serif);font-weight:500;
   font-size:clamp(42px,10.5vw,92px);
   letter-spacing:.1em;line-height:1.12;
-  background:linear-gradient(155deg,#FFFFFF 6%,var(--gold-lt) 44%,var(--gold-dp) 92%);
+  background:linear-gradient(155deg,#FFFFFF 6%,var(--moon) 42%,var(--jade) 96%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 6px 40px rgba(201,162,39,.26));
+  filter:drop-shadow(0 6px 40px rgba(246,241,226,.24));
 }
-.dot-accent{color:var(--gold);-webkit-text-fill-color:var(--gold);margin:0 .06em}
+.dot-accent{color:var(--osmanthus);-webkit-text-fill-color:var(--osmanthus);margin:0 .06em}
 
 .hero-date{
   display:flex;align-items:center;justify-content:center;gap:16px;
-  margin-top:20px;font-size:13px;letter-spacing:.24em;color:var(--muted);
+  margin-top:16px;font-size:13px;letter-spacing:.24em;color:var(--moon-dim);
 }
 .hero-date i{width:34px;height:1px;background:var(--line)}
 
 .hero-line{
-  margin-top:30px;font-family:var(--serif);
+  margin-top:24px;font-family:var(--serif);
   font-size:clamp(14px,2.6vw,17px);line-height:2.1;
-  letter-spacing:.09em;color:rgba(245,241,232,.74);
+  letter-spacing:.13em;color:rgba(246,241,226,.76);
 }
 
-/* 验证码卡片 */
+/* 口令卡片 */
 .code-card{
-  position:relative;margin-top:34px;
+  position:relative;margin-top:26px;
   display:inline-flex;align-items:center;gap:14px;
   padding:12px 14px 12px 22px;border-radius:999px;
   border:1px solid var(--line);
@@ -242,34 +269,35 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   transition:.45s var(--ease);
 }
 .code-card:hover{
-  border-color:rgba(201,162,39,.5);
-  box-shadow:0 12px 40px rgba(201,162,39,.16);
+  border-color:rgba(227,184,75,.55);
+  box-shadow:0 12px 40px rgba(227,184,75,.16);
   transform:translateY(-2px);
 }
-.code-label{font-size:11.5px;letter-spacing:.2em;color:var(--muted-2)}
+.code-label{font-size:11.5px;letter-spacing:.2em;color:var(--moon-faint)}
 .code-value{
   font-family:var(--serif);font-size:20px;letter-spacing:.22em;
-  color:var(--gold-lt);
-  text-shadow:0 0 22px rgba(201,162,39,.45);
+  color:var(--osmanthus-lt);
+  text-shadow:0 0 22px rgba(227,184,75,.45);
 }
 .copy-btn{
   padding:6px 16px;border-radius:999px;
   font-size:11.5px;letter-spacing:.14em;
-  background:rgba(201,162,39,.14);color:var(--gold-lt);
-  border:1px solid rgba(201,162,39,.26);
+  background:rgba(227,184,75,.14);color:var(--osmanthus-lt);
+  border:1px solid rgba(227,184,75,.26);
   transition:.35s var(--ease);
 }
-.copy-btn:hover{background:rgba(201,162,39,.28)}
-.copy-btn.done{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.copy-btn:hover{background:rgba(227,184,75,.28)}
+.copy-btn:active{background:rgba(227,184,75,.4)}
+.copy-btn.done{background:var(--osmanthus);color:var(--night);border-color:var(--osmanthus)}
 
 .scroll-cue{
-  margin-top:clamp(40px,7vh,64px);
+  margin-top:clamp(26px,4.5vh,44px);
   display:flex;flex-direction:column;align-items:center;gap:10px;
-  font-size:11px;letter-spacing:.32em;color:var(--muted-2);
+  font-size:11px;letter-spacing:.32em;color:var(--moon-faint);
 }
 .scroll-cue i{
   width:1px;height:42px;
-  background:linear-gradient(180deg,var(--gold),transparent);
+  background:linear-gradient(180deg,var(--osmanthus),transparent);
   animation:cue 2.1s var(--ease) infinite;
 }
 @keyframes cue{
@@ -278,30 +306,30 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   100%{transform:scaleY(.2);transform-origin:bottom;opacity:0}
 }
 
-/* ---------- 信 ---------- */
+/* ---------- 信：宣纸 ---------- */
 .paper{
   position:relative;
   max-width:720px;margin:0 auto;
   padding:clamp(34px,6vw,58px) clamp(26px,5.6vw,60px);
   border-radius:4px;
   background:
-    linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
-  border:1px solid rgba(201,162,39,.18);
-  box-shadow:0 30px 90px rgba(0,0,0,.42);
+    linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.018));
+  border:1px solid rgba(227,184,75,.18);
+  box-shadow:0 30px 90px rgba(0,0,0,.45);
   font-family:var(--serif);
   font-size:clamp(15px,2.7vw,17.5px);
   line-height:2.25;letter-spacing:.055em;
-  color:rgba(245,241,232,.9);
+  color:rgba(246,241,226,.9);
 }
 .paper::before,.paper::after{
   content:"";position:absolute;width:22px;height:22px;
-  border:1px solid rgba(201,162,39,.42);
+  border:1px solid rgba(227,184,75,.42);
 }
 .paper::before{top:14px;left:14px;border-right:0;border-bottom:0}
 .paper::after{bottom:14px;right:14px;border-left:0;border-top:0}
 
 .paper-mark{
-  font-size:72px;line-height:.7;color:rgba(201,162,39,.24);
+  font-size:72px;line-height:.7;color:rgba(227,184,75,.24);
   margin-bottom:14px;
 }
 .paper p{margin-bottom:1.15em;text-indent:2em}
@@ -309,130 +337,47 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 
 .paper-sign{
   margin-top:34px;padding-top:22px;
-  border-top:1px dashed rgba(201,162,39,.24);
+  border-top:1px dashed rgba(227,184,75,.24);
   display:flex;align-items:center;justify-content:space-between;
   flex-wrap:wrap;gap:12px;
 }
-.sign-label{font-size:12px;letter-spacing:.24em;color:var(--muted-2)}
+.sign-label{font-size:12px;letter-spacing:.24em;color:var(--moon-faint)}
 .sign-code{
   font-size:clamp(20px,4vw,26px);letter-spacing:.24em;
-  color:var(--gold-lt);text-shadow:0 0 26px rgba(201,162,39,.4);
+  color:var(--osmanthus-lt);text-shadow:0 0 26px rgba(227,184,75,.4);
 }
 
-/* ---------- 蛋糕 / 许愿 ---------- */
-.cake-wrap{display:flex;flex-direction:column;align-items:center;gap:30px}
-
-.cake{
-  width:clamp(190px,42vw,270px);height:auto;
-  filter:drop-shadow(0 22px 46px rgba(0,0,0,.5));
-  transition:.6s var(--ease);
-}
-#flame,#flameCore{transform-origin:120px 47px}
-.cake.blown #flame,.cake.blown #flameCore{
-  opacity:0;transform:scale(.2);
-  transition:.5s var(--ease);
-}
-.cake.blown{transform:translateY(2px) scale(1.015)}
-
-.cake-actions{display:flex;flex-direction:column;align-items:center;gap:16px}
-.cake-count{font-size:13px;letter-spacing:.16em;color:var(--muted)}
-.cake-count strong{color:var(--gold-lt);font-size:17px;margin:0 4px}
-
-.btn-main{
-  position:relative;overflow:hidden;
-  padding:15px 46px;border-radius:999px;
-  font-size:14px;letter-spacing:.3em;text-indent:.3em;
-  color:var(--ink);font-weight:600;
-  background:linear-gradient(135deg,var(--gold-lt),var(--gold) 55%,var(--gold-dp));
-  box-shadow:0 14px 40px rgba(201,162,39,.32);
-  transition:.42s var(--ease);
-}
-.btn-main:hover{transform:translateY(-3px);box-shadow:0 20px 54px rgba(201,162,39,.46)}
-.btn-main:active{transform:translateY(0) scale(.98)}
-
-.wish-form{
-  max-width:680px;margin:clamp(44px,7vh,70px) auto 0;
-  padding:clamp(22px,4vw,32px);
-  border-radius:16px;
-  border:1px solid rgba(201,162,39,.16);
-  background:rgba(255,255,255,.028);
-}
-.wish-label{
-  display:block;font-size:12px;letter-spacing:.24em;
-  color:var(--gold);margin-bottom:14px;
-}
-.wish-row{display:flex;gap:10px;flex-wrap:wrap}
-.wish-input{
-  flex:1 1 240px;min-width:0;
-  padding:13px 18px;border-radius:10px;
-  background:rgba(0,0,0,.28);
-  border:1px solid rgba(245,241,232,.12);
-  color:var(--cream);font-size:14.5px;
-  transition:.35s var(--ease);
-}
-.wish-input::placeholder{color:rgba(245,241,232,.3)}
-.wish-input:focus{
-  outline:none;border-color:rgba(201,162,39,.6);
-  box-shadow:0 0 0 4px rgba(201,162,39,.12);
-  background:rgba(0,0,0,.4);
-}
-.btn-ghost{
-  padding:13px 32px;border-radius:10px;
-  font-size:13.5px;letter-spacing:.24em;
-  color:var(--gold-lt);
-  border:1px solid rgba(201,162,39,.4);
-  background:rgba(201,162,39,.08);
-  transition:.35s var(--ease);
-}
-.btn-ghost:hover{background:rgba(201,162,39,.2);transform:translateY(-2px)}
-
-.wish-tip{margin-top:12px;font-size:11.5px;letter-spacing:.1em;color:var(--muted-2)}
-
-.wish-list{
-  list-style:none;margin-top:20px;
-  display:flex;flex-direction:column;gap:10px;
-}
-.wish-list li{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:13px 16px;border-radius:10px;
-  background:rgba(201,162,39,.06);
-  border-left:2px solid rgba(201,162,39,.5);
-  font-size:14px;line-height:1.7;
-  color:rgba(245,241,232,.86);
-  animation:wishIn .55s var(--ease) both;
-}
-.wish-list li::before{content:"✦";color:var(--gold);font-size:12px;line-height:1.9}
-@keyframes wishIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
-
-/* ---------- 纪念分区（黑白 · 庄重） ---------- */
-.memory{
+/* ---------- 念：月华冷调 · 庄重 ---------- */
+.reunion{
   max-width:none;
   margin-top:clamp(40px,8vh,80px);
   padding:clamp(72px,12vh,124px) clamp(22px,6vw,64px);
-  background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.62) 18%,rgba(0,0,0,.62) 82%,rgba(0,0,0,0));
-  filter:grayscale(1);
+  background:linear-gradient(180deg,
+    rgba(6,10,20,0),rgba(4,8,18,.72) 18%,
+    rgba(4,8,18,.72) 82%,rgba(6,10,20,0));
   text-align:center;
 }
 .mem-inner{max-width:680px;margin:0 auto}
 .mem-date{
   font-family:var(--serif);
   font-size:12.5px;letter-spacing:.5em;text-indent:.5em;
-  color:rgba(245,241,232,.42);margin-bottom:20px;
+  color:rgba(246,241,226,.4);margin-bottom:20px;
 }
 .mem-title{
   font-family:var(--serif);font-weight:400;
   font-size:clamp(26px,5.4vw,42px);
   letter-spacing:.24em;text-indent:.24em;
-  color:#EDEDED;
+  color:var(--moon-lt);
+  text-shadow:0 0 40px rgba(246,241,226,.28);
 }
 .mem-rule{
   width:60px;height:1px;margin:26px auto;
-  background:rgba(237,237,237,.35);
+  background:linear-gradient(90deg,transparent,rgba(143,179,214,.7),transparent);
 }
 .mem-text{
   font-family:var(--serif);
   font-size:clamp(14px,2.6vw,16px);line-height:2.3;
-  letter-spacing:.08em;color:rgba(237,237,237,.66);
+  letter-spacing:.08em;color:rgba(226,233,244,.7);
   margin-bottom:1em;
 }
 .mem-honor{
@@ -440,7 +385,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   font-family:var(--serif);
   font-size:clamp(15px,3vw,19px);
   letter-spacing:.36em;text-indent:.36em;
-  color:rgba(237,237,237,.9);
+  color:rgba(246,241,226,.92);
 }
 
 /* ---------- 页脚 ---------- */
@@ -452,20 +397,20 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 }
 .foot-line{
   width:70px;height:1px;margin:0 auto 30px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  background:linear-gradient(90deg,transparent,var(--osmanthus),transparent);
 }
 .foot-main{
   font-family:var(--serif);
   font-size:clamp(17px,3.4vw,22px);letter-spacing:.2em;
-  color:rgba(245,241,232,.86);
+  color:rgba(246,241,226,.86);
 }
 .foot-sub{
   margin-top:12px;font-size:11.5px;letter-spacing:.14em;
-  color:var(--muted-2);
+  color:var(--moon-faint);
 }
 
-/* ---------- 撒花 ---------- */
-#confetti{
+/* ---------- 桂花粒子 ---------- */
+#petals{
   position:fixed;inset:0;z-index:150;
   pointer-events:none;
 }
@@ -484,7 +429,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   .code-card{gap:10px;padding:10px 12px 10px 18px}
   .paper p{text-indent:1.6em}
   .paper-mark{font-size:56px}
-  .memory{filter:grayscale(1)}
+  .cloud-a,.cloud-b{opacity:.24}
 }
 
 /* ---------- 减弱动效 ---------- */

@@ -5,20 +5,24 @@
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0" />
-        <title>今天是四季的生日喔~</title>
+        <title>花好月圆 · 中秋</title>
         <meta
             name="description"
-            content="写给四季大人的生日礼物" />
+            content="今夜月明人尽望，不知秋思落谁家。一封写在八月十五的信。" />
+        <meta
+            name="theme-color"
+            content="#0A101E" />
         <link
             rel="stylesheet"
             href="style.css" />
     </head>
     <body>
-        <!-- 背景层 -->
+        <!-- 背景层：夜空 / 月晕 / 云影 -->
         <div class="bg-fixed">
-            <canvas id="stars"></canvas>
-            <div class="aurora aurora-a"></div>
-            <div class="aurora aurora-b"></div>
+            <canvas id="sky"></canvas>
+            <div class="moon-halo"></div>
+            <div class="cloud cloud-a"></div>
+            <div class="cloud cloud-b"></div>
             <div class="grain"></div>
         </div>
 
@@ -36,7 +40,7 @@
             <button
                 data-target="hero"
                 class="dot is-active">
-                <span>首页</span>
+                <span>月</span>
             </button>
             <button
                 data-target="letter"
@@ -44,19 +48,14 @@
                 <span>信</span>
             </button>
             <button
-                data-target="wish"
+                data-target="reunion"
                 class="dot">
-                <span>愿望</span>
-            </button>
-            <button
-                data-target="memory"
-                class="dot">
-                <span>纪念</span>
+                <span>念</span>
             </button>
         </nav>
 
         <main>
-            <!-- ============ 首屏 ============ -->
+            <!-- ============ 首屏：月 ============ -->
             <section
                 class="sec hero"
                 id="hero">
@@ -68,52 +67,48 @@
                     <img
                         class="avatar"
                         src="assets/avatar.jpg"
-                        alt="四季大人的头像" />
+                        alt="月色中人" />
                     <div
-                        class="flame"
-                        aria-hidden="true">
-                        <i></i>
-                        <i></i>
-                        <i></i>
-                    </div>
+                        class="halo-pulse"
+                        aria-hidden="true"></div>
                 </div>
 
                 <p
                     class="eyebrow reveal"
                     data-delay="1">
-                    HAPPY BIRTHDAY
+                    MID-AUTUMN FESTIVAL
                 </p>
                 <h1
                     class="hero-title reveal"
                     data-delay="2">
-                    四季
+                    花好
                     <span class="dot-accent">·</span>
-                    映姬
+                    月圆
                 </h1>
                 <p
                     class="hero-date reveal"
                     data-delay="3">
-                    <span>九月十八日</span>
+                    <span>农历八月十五</span>
                     <i></i>
-                    <span>二十岁</span>
+                    <span>中秋</span>
                 </p>
 
                 <p
                     class="hero-line reveal"
                     data-delay="4">
-                    验证码直接给大家啦，
+                    今夜月明人尽望，
                     <br />
-                    如果感兴趣的话可以下滑看看哦
+                    不知秋思落谁家。
                 </p>
 
                 <div
                     class="code-card reveal"
                     data-delay="5">
-                    <div class="code-label">今日验证码</div>
+                    <div class="code-label">今夜寄语</div>
                     <div
                         class="code-value"
                         id="codeValue">
-                        918918
+                        925925
                     </div>
                     <button
                         class="copy-btn"
@@ -136,230 +131,43 @@
                 id="letter">
                 <header class="sec-head reveal">
                     <span class="sec-no">01</span>
-                    <h2 class="sec-title">想说的话</h2>
-                    <p class="sec-desc">四季大人写的一小段字</p>
+                    <h2 class="sec-title">月下寄语</h2>
+                    <p class="sec-desc">写在中秋夜里的一小段字</p>
                 </header>
 
                 <article
                     class="paper reveal"
                     data-delay="1">
                     <div class="paper-mark">&ldquo;</div>
-                    <p>今天是四季的生日，所以就不让大家扫码啦，验证码在上面，不要看漏了哦。</p>
                     <p>
-                        一年又这样溜过去啦～感觉时间过得好快呀，一眨眼就二十岁了。感觉心里有很多想说的话但是一时间又不知道该说什么。
+                        中秋快乐呀～今夜月满，想说的话也满，今天的验证码在上面，不是 999999 了喔。
                     </p>
                     <p>
-                        谢谢你们还在这儿。这一年我做了些事，也偷了些懒；有些话说出口了，有些还留在心里。能被你们记住、被你们等着，是件挺奢侈的事，我心里很明清，也很感激大家！
+                        一年又走到秋天了。桂花一开，风里都是旧时候的味道，总会忽然想起一些人、一些还没来得及说的话。
                     </p>
                     <p>
-                        多的煽情的话就不说啦，那就祝我自己生日快乐～也祝看到这句话的你们，从今往后的每一年，四季顺心。
+                        谢谢你们还在。月有阴晴圆缺，人有聚散离合，能被惦记、能被等一等，是件很奢侈的事，我都记在心里。
+                    </p>
+                    <p>
+                        多的煽情就不说啦，那就借这轮满月，祝看到这行字的你：月长圆，人长安。
                     </p>
                     <div class="paper-sign">
                         <span class="sign-label">四 季 · 映 姬</span>
-                        <span class="sign-code">九月十八日</span>
+                        <span class="sign-code">八月十五</span>
                     </div>
                 </article>
             </section>
 
-            <!-- ============ 愿望 ============ -->
+            <!-- ============ 念 ============ -->
             <section
-                class="sec wish"
-                id="wish">
-                <header class="sec-head reveal">
-                    <span class="sec-no">02</span>
-                    <h2 class="sec-title">吹蜡烛</h2>
-                    <p class="sec-desc">吹灭蜡烛，然后留句话再走叭~</p>
-                </header>
-
-                <div
-                    class="cake-wrap reveal"
-                    data-delay="1">
-                    <svg
-                        class="cake"
-                        viewBox="0 0 240 200"
-                        role="img"
-                        aria-label="生日蛋糕">
-                        <!-- 蜡烛 -->
-                        <g id="candleGroup">
-                            <rect
-                                x="114"
-                                y="46"
-                                width="12"
-                                height="42"
-                                rx="4"
-                                fill="#F0E3C8" />
-                            <rect
-                                x="114"
-                                y="46"
-                                width="12"
-                                height="42"
-                                rx="4"
-                                fill="url(#stripe)" />
-                            <ellipse
-                                id="flame"
-                                cx="120"
-                                cy="36"
-                                rx="7"
-                                ry="11"
-                                fill="url(#flameGrad)" />
-                            <ellipse
-                                id="flameCore"
-                                cx="120"
-                                cy="38"
-                                rx="3"
-                                ry="5.5"
-                                fill="#FFF6D8" />
-                        </g>
-                        <!-- 蛋糕体 -->
-                        <rect
-                            x="42"
-                            y="88"
-                            width="156"
-                            height="18"
-                            rx="9"
-                            fill="#EFE3CD" />
-                        <rect
-                            x="46"
-                            y="104"
-                            width="148"
-                            height="34"
-                            rx="6"
-                            fill="#C9A227" />
-                        <rect
-                            x="46"
-                            y="104"
-                            width="148"
-                            height="10"
-                            fill="#DCB93F"
-                            opacity=".55" />
-                        <rect
-                            x="38"
-                            y="138"
-                            width="164"
-                            height="18"
-                            rx="9"
-                            fill="#EFE3CD" />
-                        <rect
-                            x="42"
-                            y="154"
-                            width="156"
-                            height="32"
-                            rx="6"
-                            fill="#8C6A3F" />
-                        <rect
-                            x="42"
-                            y="154"
-                            width="156"
-                            height="9"
-                            fill="#A37F4D"
-                            opacity=".6" />
-                        <!-- 奶油点 -->
-                        <g fill="#FFF9EC">
-                            <circle
-                                cx="60"
-                                cy="90"
-                                r="4" />
-                            <circle
-                                cx="90"
-                                cy="86"
-                                r="4" />
-                            <circle
-                                cx="120"
-                                cy="90"
-                                r="4" />
-                            <circle
-                                cx="150"
-                                cy="86"
-                                r="4" />
-                            <circle
-                                cx="180"
-                                cy="90"
-                                r="4" />
-                        </g>
-                        <defs>
-                            <linearGradient
-                                id="flameGrad"
-                                x1="0"
-                                y1="1"
-                                x2="0"
-                                y2="0">
-                                <stop
-                                    offset="0%"
-                                    stop-color="#FF8A2B" />
-                                <stop
-                                    offset="60%"
-                                    stop-color="#FFC74D" />
-                                <stop
-                                    offset="100%"
-                                    stop-color="#FFF3C4" />
-                            </linearGradient>
-                            <pattern
-                                id="stripe"
-                                width="12"
-                                height="12"
-                                patternUnits="userSpaceOnUse"
-                                patternTransform="rotate(35)">
-                                <rect
-                                    width="6"
-                                    height="12"
-                                    fill="#E8B4B8"
-                                    opacity=".85" />
-                            </pattern>
-                        </defs>
-                    </svg>
-
-                    <div class="cake-actions">
-                        <div class="cake-count">
-                            已经吹过
-                            <strong id="blowCount">0</strong>
-                            次蜡烛
-                        </div>
-                        <button
-                            class="btn-main"
-                            id="blowBtn">
-                            吹 蜡 烛
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="wish-form reveal"
-                    data-delay="2">
-                    <label
-                        class="wish-label"
-                        for="wishInput">
-                        留一句话给四季
-                    </label>
-                    <div class="wish-row">
-                        <input
-                            id="wishInput"
-                            class="wish-input"
-                            type="text"
-                            maxlength="60"
-                            placeholder="例如：四季大人生日快乐！" />
-                        <button
-                            class="btn-ghost"
-                            id="wishSend">
-                            送 出
-                        </button>
-                    </div>
-                    <p class="wish-tip">你的心意四季收得到哦 _(:з」∠)_</p>
-                    <ul
-                        class="wish-list"
-                        id="wishList"></ul>
-                </div>
-            </section>
-
-            <!-- ============ 纪念 ============ -->
-            <section
-                class="sec memory"
-                id="memory">
+                class="sec reunion"
+                id="reunion">
                 <div class="mem-inner">
-                    <p class="mem-date reveal">1931 · 09 · 18</p>
+                    <p class="mem-date reveal">农 历 · 八 月 · 十 五</p>
                     <h2
                         class="mem-title reveal"
                         data-delay="1">
-                        铭记历史
+                        千里共婵娟
                     </h2>
                     <div
                         class="mem-rule reveal"
@@ -367,17 +175,17 @@
                     <p
                         class="mem-text reveal"
                         data-delay="3">
-                        9 月 18 日，是四季的生日，也是九一八事变纪念日。
+                        相隔再远，抬头看见的也是同一轮月亮。
                     </p>
                     <p
                         class="mem-text reveal"
                         data-delay="4">
-                        1931 年的这一天，山河蒙难，警钟长鸣 —— 生命值得庆祝，也记得来时的路。
+                        海上生明月，天涯共此时。愿走远的人有归途，愿留下的人有团圆。
                     </p>
                     <p
                         class="mem-honor reveal"
                         data-delay="5">
-                        勿忘国耻 · 吾辈自强
+                        愿得年年 · 常见中秋月
                     </p>
                 </div>
             </section>
@@ -386,11 +194,11 @@
             <footer class="foot">
                 <div class="foot-line"></div>
                 <p class="foot-main">四季·映姬　谨致</p>
-                <p class="foot-sub">2026.09.18</p>
+                <p class="foot-sub">2026.09.25 · 中秋</p>
             </footer>
         </main>
 
-        <canvas id="confetti"></canvas>
+        <canvas id="petals"></canvas>
 
         <script src="script.js"></script>
     </body>
