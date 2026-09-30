@@ -1,5 +1,5 @@
 /* ============================================================
-   中秋 · 花好月圆 交互
+   国庆 · 盛世华诞 交互
    纯原生 JS，无依赖
    ============================================================ */
 (function () {
@@ -7,20 +7,23 @@
 
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    /* ---------- 进场撒桂 ---------- */
+    /* ---------- 进场撒金 ---------- */
     window.setTimeout(function () {
-        burst(window.innerWidth / 2, window.innerHeight * 0.4, 90);
+        burst(window.innerWidth / 2, window.innerHeight * 0.4, 100);
     }, 800);
 
-    /* ---------- 夜空：星子 + 常驻落桂 ---------- */
+    /* ---------- 夜空：星子 + 烟花 + 落金 ---------- */
     var canvas = document.getElementById("sky");
     var ctx = canvas.getContext("2d");
     var stars = [];
-    var petals = [];
+    var confetti = [];
+    var rockets = [];
+    var sparks = [];
     var w = 0,
         h = 0,
         dpr = 1,
         t = 0;
+    var fireTimer = 70;
 
     function sizeCanvas() {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -30,7 +33,7 @@
         canvas.height = Math.floor(h * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         buildStars();
-        buildPetals();
+        buildConfetti();
     }
 
     function buildStars() {
@@ -48,46 +51,88 @@
         }
     }
 
-    function buildPetals() {
-        petals = [];
-        var count = Math.min(Math.round(w / 26), 42);
+    function buildConfetti() {
+        confetti = [];
+        var count = Math.min(Math.round(w / 30), 38);
         for (var i = 0; i < count; i++) {
-            petals.push(makePetal(Math.random() * -h));
+            confetti.push(makeConfetti(Math.random() * -h));
         }
     }
 
-    function makePetal(y) {
+    function makeConfetti(y) {
+        var r = Math.random();
         return {
             x: Math.random() * w,
             y: y,
-            r: Math.random() * 2.6 + 1.9,
-            vy: Math.random() * 0.34 + 0.16,
+            r: Math.random() * 2.4 + 1.5,
+            vy: Math.random() * 0.34 + 0.15,
             sway: Math.random() * 1.3 + 0.5,
             ph: Math.random() * Math.PI * 2,
             rot: Math.random() * Math.PI * 2,
-            vr: (Math.random() - 0.5) * 0.012,
-            a: Math.random() * 0.22 + 0.1,
-            c: Math.random() < 0.32 ? "#F6F1E2" : "#E3B84B"
+            vr: (Math.random() - 0.5) * 0.02,
+            a: Math.random() * 0.24 + 0.1,
+            c: r < 0.42 ? "#F6EFDF" : r < 0.74 ? "#E9B949" : "#E23B4E"
         };
     }
 
-    /* 一朵五瓣桂花 */
-    function drawPetal(c, x, y, r, rot, color, alpha) {
+    /* 一颗小金星 */
+    function drawStarShape(c, x, y, r, rot, color, alpha) {
         c.save();
         c.globalAlpha = alpha;
         c.translate(x, y);
         c.rotate(rot);
         c.fillStyle = color;
-        for (var k = 0; k < 5; k++) {
-            c.beginPath();
-            c.ellipse(0, -r * 0.62, r * 0.42, r * 0.68, 0, 0, Math.PI * 2);
-            c.fill();
-            c.rotate((Math.PI * 2) / 5);
-        }
         c.beginPath();
-        c.arc(0, 0, r * 0.2, 0, Math.PI * 2);
+        for (var k = 0; k < 5; k++) {
+            var ao = -Math.PI / 2 + k * ((Math.PI * 2) / 5);
+            var ai = ao + Math.PI / 5;
+            var ox = Math.cos(ao) * r;
+            var oy = Math.sin(ao) * r;
+            var ix = Math.cos(ai) * r * 0.42;
+            var iy = Math.sin(ai) * r * 0.42;
+            if (k === 0) c.moveTo(ox, oy);
+            else c.lineTo(ox, oy);
+            c.lineTo(ix, iy);
+        }
+        c.closePath();
         c.fill();
         c.restore();
+    }
+
+    var FIRE_COLORS = ["#E9B949", "#F7DE9B", "#E23B4E", "#FFB4A2", "#F6EFDF"];
+
+    function launchFirework() {
+        var targetY = h * (0.1 + Math.random() * 0.32);
+        var g = 0.12;
+        var dist = h + 8 - targetY;
+        rockets.push({
+            x: w * (0.12 + Math.random() * 0.76),
+            y: h + 8,
+            vx: (Math.random() - 0.5) * 0.7,
+            vy: -Math.sqrt(2 * g * dist),
+            g: g,
+            targetY: targetY,
+            c: FIRE_COLORS[(Math.random() * FIRE_COLORS.length) | 0]
+        });
+    }
+
+    function explode(x, y, color) {
+        var n = 46 + ((Math.random() * 26) | 0);
+        for (var i = 0; i < n; i++) {
+            var ang = ((Math.PI * 2) / n) * i + Math.random() * 0.14;
+            var spd = Math.random() * 3.4 + 1.6;
+            sparks.push({
+                x: x,
+                y: y,
+                vx: Math.cos(ang) * spd,
+                vy: Math.sin(ang) * spd,
+                g: 0.028,
+                r: Math.random() * 1.5 + 0.9,
+                life: 1,
+                decay: Math.random() * 0.012 + 0.008,
+                c: Math.random() < 0.74 ? color : FIRE_COLORS[(Math.random() * FIRE_COLORS.length) | 0]
+            });
+        }
     }
 
     function drawSky() {
@@ -99,21 +144,68 @@
             var alpha = s.a * (0.55 + 0.45 * Math.sin(t * s.sp * 60 + s.ph));
             ctx.beginPath();
             ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(246,241,226," + alpha.toFixed(3) + ")";
+            ctx.fillStyle = "rgba(246,239,223," + alpha.toFixed(3) + ")";
             ctx.fill();
         }
 
-        // 落桂
-        for (var j = 0; j < petals.length; j++) {
-            var p = petals[j];
+        // 烟花升空
+        for (var ri = rockets.length - 1; ri >= 0; ri--) {
+            var rk = rockets[ri];
+            rk.vy += rk.g;
+            rk.x += rk.vx;
+            rk.y += rk.vy;
+            ctx.globalAlpha = 0.9;
+            ctx.beginPath();
+            ctx.arc(rk.x, rk.y, 1.7, 0, Math.PI * 2);
+            ctx.fillStyle = rk.c;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+            if (rk.vy >= 0 || rk.y <= rk.targetY) {
+                explode(rk.x, rk.y, rk.c);
+                rockets.splice(ri, 1);
+            }
+        }
+
+        // 烟花绽放
+        for (var si = sparks.length - 1; si >= 0; si--) {
+            var sp = sparks[si];
+            sp.vy += sp.g;
+            sp.vx *= 0.985;
+            sp.vy *= 0.985;
+            sp.x += sp.vx;
+            sp.y += sp.vy;
+            sp.life -= sp.decay;
+            if (sp.life <= 0) {
+                sparks.splice(si, 1);
+                continue;
+            }
+            ctx.globalAlpha = Math.max(sp.life, 0);
+            ctx.beginPath();
+            ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
+            ctx.fillStyle = sp.c;
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        // 落金
+        for (var j = 0; j < confetti.length; j++) {
+            var p = confetti[j];
             p.y += p.vy;
             p.ph += 0.014;
             p.x += Math.sin(p.ph) * p.sway * 0.35;
             p.rot += p.vr;
             if (p.y - 20 > h) {
-                petals[j] = makePetal(-20);
+                confetti[j] = makeConfetti(-20);
             }
-            drawPetal(ctx, p.x, p.y, p.r, p.rot, p.c, p.a);
+            drawStarShape(ctx, p.x, p.y, p.r, p.rot, p.c, p.a);
+        }
+
+        // 定时发射
+        fireTimer -= 1;
+        if (fireTimer <= 0) {
+            launchFirework();
+            if (Math.random() < 0.34) launchFirework();
+            fireTimer = 96 + ((Math.random() * 120) | 0);
         }
 
         t += 1;
@@ -124,16 +216,16 @@
     if (!reduced) {
         drawSky();
     } else {
-        // 静态帧：画出星子与落桂，不留空
-        for (var si = 0; si < stars.length; si++) {
+        // 静态帧：画出星子与落金，不留空
+        for (var si2 = 0; si2 < stars.length; si2++) {
             ctx.beginPath();
-            ctx.arc(stars[si].x, stars[si].y, stars[si].r, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(246,241,226," + stars[si].a + ")";
+            ctx.arc(stars[si2].x, stars[si2].y, stars[si2].r, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(246,239,223," + stars[si2].a + ")";
             ctx.fill();
         }
-        for (var pi = 0; pi < petals.length; pi++) {
-            var pp = petals[pi];
-            drawPetal(ctx, pp.x, pp.y, pp.r, pp.rot, pp.c, pp.a);
+        for (var pi = 0; pi < confetti.length; pi++) {
+            var pp = confetti[pi];
+            drawStarShape(ctx, pp.x, pp.y, pp.r, pp.rot, pp.c, pp.a);
         }
     }
     window.addEventListener("resize", sizeCanvas);
@@ -166,9 +258,9 @@
         });
     }
 
-    /* ---------- 阅读进度 · 导航高亮 · 月亮升起 ---------- */
+    /* ---------- 阅读进度 · 导航高亮 · 华光升起 ---------- */
     var readBar = document.getElementById("readBar");
-    var moon = document.querySelector(".moon-halo");
+    var halo = document.querySelector(".star-halo");
     var dots = Array.prototype.slice.call(document.querySelectorAll(".dot"));
     var sections = dots.map(function (d) {
         return document.getElementById(d.getAttribute("data-target"));
@@ -179,10 +271,10 @@
         var p = max > 0 ? window.scrollY / max : 0;
         readBar.style.width = (p * 100).toFixed(2) + "%";
 
-        // 月随阅读缓缓升起、渐近（减弱动效时保持静止）
-        if (moon && !reduced) {
-            moon.style.setProperty("--moon-y", (-p * window.innerHeight * 0.3).toFixed(1) + "px");
-            moon.style.setProperty("--moon-scale", (1 + p * 0.14).toFixed(3));
+        // 华光随阅读缓缓升起、渐近（减弱动效时保持静止）
+        if (halo && !reduced) {
+            halo.style.setProperty("--moon-y", (-p * window.innerHeight * 0.3).toFixed(1) + "px");
+            halo.style.setProperty("--moon-scale", (1 + p * 0.14).toFixed(3));
         }
 
         var mid = window.scrollY + window.innerHeight * 0.42;
@@ -243,7 +335,7 @@
         }
     });
 
-    /* ---------- 桂花迸发 ---------- */
+    /* ---------- 金屑迸发 ---------- */
     var cc = document.getElementById("petals");
     var cx = cc.getContext("2d");
     var parts = [];
@@ -258,23 +350,23 @@
     sizePetals();
     window.addEventListener("resize", sizePetals);
 
-    var COLORS = ["#E3B84B", "#F4D97E", "#F6F1E2", "#E8755C", "#C1503F"];
+    var COLORS = ["#E9B949", "#F7DE9B", "#F6EFDF", "#E23B4E", "#C8102E"];
 
     function burst(x, y, n) {
         if (reduced) return;
-        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var d = Math.min(window.devicePixelRatio || 1, 2);
         for (var i = 0; i < n; i++) {
             var ang = Math.random() * Math.PI * 2;
-            var spd = Math.random() * 5.5 + 1.5;
+            var spd = Math.random() * 5.8 + 1.6;
             parts.push({
-                x: x * dpr,
-                y: y * dpr,
+                x: x * d,
+                y: y * d,
                 vx: Math.cos(ang) * spd,
-                vy: Math.sin(ang) * spd - 2.4,
-                g: 0.16,
-                r: (Math.random() * 3.2 + 1.6) * dpr,
+                vy: Math.sin(ang) * spd - 2.6,
+                g: 0.17,
+                r: (Math.random() * 3.4 + 1.8) * d,
                 rot: Math.random() * Math.PI,
-                vr: (Math.random() - 0.5) * 0.24,
+                vr: (Math.random() - 0.5) * 0.22,
                 c: COLORS[(Math.random() * COLORS.length) | 0],
                 life: 1
             });
@@ -302,15 +394,7 @@
                 continue;
             }
 
-            cx.save();
-            cx.globalAlpha = Math.max(p.life, 0);
-            cx.translate(p.x, p.y);
-            cx.rotate(p.rot);
-            cx.fillStyle = p.c;
-            cx.beginPath();
-            cx.ellipse(0, 0, p.r, p.r * 0.62, 0, 0, Math.PI * 2);
-            cx.fill();
-            cx.restore();
+            drawStarShape(cx, p.x, p.y, Math.max(p.r, 0.5), p.rot, p.c, Math.max(p.life, 0));
         }
 
         if (parts.length) {

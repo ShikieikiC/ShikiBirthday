@@ -5,22 +5,46 @@
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0" />
-        <title>花好月圆 · 中秋</title>
+        <title>盛世华诞 · 国庆</title>
         <meta
             name="description"
-            content="今夜月明人尽望，不知秋思落谁家。一封写在八月十五的信。" />
+            content="五星闪耀，皆为信仰。一封写在一九四九年十月一日的信，写给今朝的你。" />
         <meta
             name="theme-color"
-            content="#0A101E" />
+            content="#0D0406" />
         <link
             rel="stylesheet"
             href="style.css" />
     </head>
     <body>
-        <!-- 背景层：夜空 / 月晕 / 云影 -->
+        <!-- 背景层：夜空 / 华光 / 五星 / 祥云 -->
         <div class="bg-fixed">
             <canvas id="sky"></canvas>
-            <div class="moon-halo"></div>
+            <svg
+                class="star-flag"
+                viewBox="0 0 100 100"
+                aria-hidden="true">
+                <defs>
+                    <radialGradient
+                        id="starGrad"
+                        cx="50%"
+                        cy="46%"
+                        r="58%">
+                        <stop
+                            offset="0%"
+                            stop-color="#F7DE9B" />
+                        <stop
+                            offset="52%"
+                            stop-color="#E9B949" />
+                        <stop
+                            offset="100%"
+                            stop-color="#C8102E" />
+                    </radialGradient>
+                </defs>
+                <polygon
+                    points="50,4 61.5,38 97.5,38 68.5,59 79.5,93 50,72 20.5,93 31.5,59 2.5,38 38.5,38" />
+            </svg>
+            <div class="star-halo"></div>
             <div class="cloud cloud-a"></div>
             <div class="cloud cloud-b"></div>
             <div class="grain"></div>
@@ -40,22 +64,22 @@
             <button
                 data-target="hero"
                 class="dot is-active">
-                <span>月</span>
+                <span>庆</span>
             </button>
             <button
                 data-target="letter"
                 class="dot">
-                <span>信</span>
+                <span>愿</span>
             </button>
             <button
                 data-target="reunion"
                 class="dot">
-                <span>念</span>
+                <span>国</span>
             </button>
         </nav>
 
         <main>
-            <!-- ============ 首屏：月 ============ -->
+            <!-- ============ 首屏：庆 ============ -->
             <section
                 class="sec hero"
                 id="hero">
@@ -67,48 +91,51 @@
                     <img
                         class="avatar"
                         src="assets/avatar.jpg"
-                        alt="月色中人" />
+                        alt="红旗之下" />
                     <div
                         class="halo-pulse"
                         aria-hidden="true"></div>
+                    <span
+                        class="star-badge"
+                        aria-hidden="true">★</span>
                 </div>
 
                 <p
                     class="eyebrow reveal"
                     data-delay="1">
-                    MID-AUTUMN FESTIVAL
+                    NATIONAL DAY OF CHINA
                 </p>
                 <h1
                     class="hero-title reveal"
                     data-delay="2">
-                    花好
+                    盛世
                     <span class="dot-accent">·</span>
-                    月圆
+                    华诞
                 </h1>
                 <p
                     class="hero-date reveal"
                     data-delay="3">
-                    <span>农历八月十五</span>
+                    <span>1949 — 2026</span>
                     <i></i>
-                    <span>中秋</span>
+                    <span>国庆</span>
                 </p>
 
                 <p
                     class="hero-line reveal"
                     data-delay="4">
-                    今夜月明人尽望，
+                    五星闪耀，皆为信仰，
                     <br />
-                    不知秋思落谁家。
+                    目光所至，皆为华夏。
                 </p>
 
                 <div
                     class="code-card reveal"
                     data-delay="5">
-                    <div class="code-label">今夜寄语</div>
+                    <div class="code-label">今日验证</div>
                     <div
                         class="code-value"
                         id="codeValue">
-                        925925
+                        261001
                     </div>
                     <button
                         class="copy-btn"
@@ -125,14 +152,14 @@
                 </div>
             </section>
 
-            <!-- ============ 信 ============ -->
+            <!-- ============ 愿 ============ -->
             <section
                 class="sec letter"
                 id="letter">
                 <header class="sec-head reveal">
                     <span class="sec-no">01</span>
-                    <h2 class="sec-title">月下寄语</h2>
-                    <p class="sec-desc">写在中秋夜里的一小段字</p>
+                    <h2 class="sec-title">国庆寄语</h2>
+                    <p class="sec-desc">写在十月一日凌晨的一小段字</p>
                 </header>
 
                 <article
@@ -140,34 +167,34 @@
                     data-delay="1">
                     <div class="paper-mark">&ldquo;</div>
                     <p>
-                        中秋快乐呀～今夜月满，想说的话也满，今天的验证码在上面，不是 999999 了喔。
+                        国庆快乐呀～又到了一年里的十月一，今天的验证码就在上面啦，不用大家扫码啦。
                     </p>
                     <p>
-                        一年又走到秋天了。桂花一开，风里都是旧时候的味道，总会忽然想起一些人、一些还没来得及说的话。
+                        从 1949 到今朝，这一路山河走得并不容易。我们生在红旗下，长在春风里，抬头是万里晴空，回首是万家灯火，所谓盛世，不过是有人替我们把路照亮了。
                     </p>
                     <p>
-                        谢谢你们还在。月有阴晴圆缺，人有聚散离合，能被惦记、能被等一等，是件很奢侈的事，我都记在心里。
+                        国是千万家，家是最小国，能被这片土地安稳地托着，与大家一齐奋进，是件很奢侈的事。感谢你们仍在这里！
                     </p>
                     <p>
-                        多的煽情就不说啦，那就借这轮满月，祝看到这行字的你：月长圆，人长安。
+                        多的煽情就不说啦，愿从今以后山河无恙，人间皆安。
                     </p>
                     <div class="paper-sign">
                         <span class="sign-label">四 季 · 映 姬</span>
-                        <span class="sign-code">八月十五</span>
+                        <span class="sign-code">十月一日</span>
                     </div>
                 </article>
             </section>
 
-            <!-- ============ 念 ============ -->
+            <!-- ============ 国 ============ -->
             <section
                 class="sec reunion"
                 id="reunion">
                 <div class="mem-inner">
-                    <p class="mem-date reveal">农 历 · 八 月 · 十 五</p>
+                    <p class="mem-date reveal">一 九 四 九 · 十 · 一</p>
                     <h2
                         class="mem-title reveal"
                         data-delay="1">
-                        千里共婵娟
+                        山河锦绣
                     </h2>
                     <div
                         class="mem-rule reveal"
@@ -175,17 +202,17 @@
                     <p
                         class="mem-text reveal"
                         data-delay="3">
-                        相隔再远，抬头看见的也是同一轮月亮。
+                        愿远行的人有归途，愿留下的人有锦绣。
                     </p>
                     <p
                         class="mem-text reveal"
                         data-delay="4">
-                        海上生明月，天涯共此时。愿走远的人有归途，愿留下的人有团圆。
+                        红旗漫卷处，皆是人间好时节。愿每一盏亮着的灯下，都有一桌说不完的家常。
                     </p>
                     <p
                         class="mem-honor reveal"
                         data-delay="5">
-                        愿得年年 · 常见中秋月
+                        愿以吾辈之青春 · 捍卫盛世之中华
                     </p>
                 </div>
             </section>
@@ -194,7 +221,7 @@
             <footer class="foot">
                 <div class="foot-line"></div>
                 <p class="foot-main">四季·映姬　谨致</p>
-                <p class="foot-sub">2026.09.25 · 中秋</p>
+                <p class="foot-sub">2026.10.01 · 国庆</p>
             </footer>
         </main>
 
