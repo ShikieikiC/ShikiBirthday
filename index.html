@@ -5,49 +5,145 @@
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0" />
-        <title>盛世华诞 · 国庆</title>
+        <title>不给糖就捣蛋</title>
         <meta
             name="description"
-            content="五星闪耀，皆为信仰。一封写在一九四九年十月一日的信，写给今朝的你。" />
+            content="提一盏南瓜灯，穿过十一月的第一场雾。一封写在十一月一日的万圣夜来信。" />
         <meta
             name="theme-color"
-            content="#0D0406" />
+            content="#0E0716" />
         <link
             rel="stylesheet"
             href="style.css" />
+        <noscript>
+            <style>
+                .reveal {
+                    opacity: 1 !important;
+                    transform: none !important;
+                }
+            </style>
+        </noscript>
     </head>
     <body>
-        <!-- 背景层：夜空 / 华光 / 五星 / 祥云 -->
+        <!-- 背景层：紫夜 / 橙月 / 蝙蝠 / 幽灵 / 蛛网 / 雾 -->
         <div class="bg-fixed">
             <canvas id="sky"></canvas>
-            <svg
-                class="star-flag"
-                viewBox="0 0 100 100"
+
+            <div
+                class="moon"
                 aria-hidden="true">
-                <defs>
-                    <radialGradient
-                        id="starGrad"
-                        cx="50%"
-                        cy="46%"
-                        r="58%">
-                        <stop
-                            offset="0%"
-                            stop-color="#F7DE9B" />
-                        <stop
-                            offset="52%"
-                            stop-color="#E9B949" />
-                        <stop
-                            offset="100%"
-                            stop-color="#C8102E" />
-                    </radialGradient>
-                </defs>
-                <polygon
-                    points="50,4 61.5,38 97.5,38 68.5,59 79.5,93 50,72 20.5,93 31.5,59 2.5,38 38.5,38" />
+                <span class="crater c1"></span>
+                <span class="crater c2"></span>
+                <span class="crater c3"></span>
+                <span class="crater c4"></span>
+            </div>
+            <div
+                class="moon-halo"
+                aria-hidden="true"></div>
+
+            <div
+                class="bats"
+                aria-hidden="true">
+                <svg
+                    class="bat bat-1"
+                    viewBox="0 0 100 60">
+                    <path
+                        d="M50 25 C 45 10 30 5 15 10 C 25 14 28 22 30 30 C 20 28 10 32 5 42 C 18 40 28 44 35 52 C 42 44 48 42 50 50 C 52 42 58 44 65 52 C 72 44 82 40 95 42 C 90 32 80 28 70 30 C 72 22 75 14 85 10 C 70 5 55 10 50 25 Z" />
+                </svg>
+                <svg
+                    class="bat bat-2"
+                    viewBox="0 0 100 60">
+                    <path
+                        d="M50 25 C 45 10 30 5 15 10 C 25 14 28 22 30 30 C 20 28 10 32 5 42 C 18 40 28 44 35 52 C 42 44 48 42 50 50 C 52 42 58 44 65 52 C 72 44 82 40 95 42 C 90 32 80 28 70 30 C 72 22 75 14 85 10 C 70 5 55 10 50 25 Z" />
+                </svg>
+                <svg
+                    class="bat bat-3"
+                    viewBox="0 0 100 60">
+                    <path
+                        d="M50 25 C 45 10 30 5 15 10 C 25 14 28 22 30 30 C 20 28 10 32 5 42 C 18 40 28 44 35 52 C 42 44 48 42 50 50 C 52 42 58 44 65 52 C 72 44 82 40 95 42 C 90 32 80 28 70 30 C 72 22 75 14 85 10 C 70 5 55 10 50 25 Z" />
+                </svg>
+            </div>
+
+            <div
+                class="ghosts"
+                aria-hidden="true">
+                <svg
+                    class="ghost ghost-1"
+                    viewBox="0 0 100 120">
+                    <path
+                        d="M50 8 C 78 8 92 28 92 54 L92 110 L80 100 L68 110 L56 100 L44 110 L32 100 L20 110 L8 100 L8 54 C 8 28 22 8 50 8 Z" />
+                    <circle
+                        cx="36"
+                        cy="52"
+                        r="6" />
+                    <circle
+                        cx="64"
+                        cy="52"
+                        r="6" />
+                </svg>
+                <svg
+                    class="ghost ghost-2"
+                    viewBox="0 0 100 120">
+                    <path
+                        d="M50 8 C 78 8 92 28 92 54 L92 110 L80 100 L68 110 L56 100 L44 110 L32 100 L20 110 L8 100 L8 54 C 8 28 22 8 50 8 Z" />
+                    <circle
+                        cx="36"
+                        cy="52"
+                        r="6" />
+                    <circle
+                        cx="64"
+                        cy="52"
+                        r="6" />
+                </svg>
+            </div>
+
+            <svg
+                class="web web-tl"
+                viewBox="0 0 200 200"
+                aria-hidden="true">
+                <path d="M0 0 L200 30" />
+                <path d="M0 0 L168 74" />
+                <path d="M0 0 L120 120" />
+                <path d="M0 0 L60 168" />
+                <path d="M0 0 L200 200" />
+                <path d="M34 6 Q 26 26 6 34" />
+                <path d="M68 12 Q 48 48 12 68" />
+                <path d="M104 20 Q 70 70 20 104" />
+                <path d="M140 30 Q 92 92 30 140" />
+                <path d="M176 38 Q 112 112 38 176" />
             </svg>
-            <div class="star-halo"></div>
-            <div class="cloud cloud-a"></div>
-            <div class="cloud cloud-b"></div>
-            <div class="grain"></div>
+            <svg
+                class="web web-tr"
+                viewBox="0 0 200 200"
+                aria-hidden="true">
+                <path d="M0 0 L200 30" />
+                <path d="M0 0 L168 74" />
+                <path d="M0 0 L120 120" />
+                <path d="M0 0 L60 168" />
+                <path d="M0 0 L200 200" />
+                <path d="M34 6 Q 26 26 6 34" />
+                <path d="M68 12 Q 48 48 12 68" />
+                <path d="M104 20 Q 70 70 20 104" />
+                <path d="M140 30 Q 92 92 30 140" />
+                <path d="M176 38 Q 112 112 38 176" />
+            </svg>
+
+            <div
+                class="spider"
+                aria-hidden="true">
+                <i class="spider-thread"></i>
+                <span class="spider-body"></span>
+            </div>
+
+            <div
+                class="fog fog-a"
+                aria-hidden="true"></div>
+            <div
+                class="fog fog-b"
+                aria-hidden="true"></div>
+            <div
+                class="grain"
+                aria-hidden="true"></div>
         </div>
 
         <!-- 阅读进度 -->
@@ -64,22 +160,22 @@
             <button
                 data-target="hero"
                 class="dot is-active">
-                <span>庆</span>
+                <span>夜</span>
             </button>
             <button
                 data-target="letter"
                 class="dot">
-                <span>愿</span>
+                <span>糖</span>
             </button>
             <button
-                data-target="reunion"
+                data-target="door"
                 class="dot">
-                <span>国</span>
+                <span>门</span>
             </button>
         </nav>
 
         <main>
-            <!-- ============ 首屏：庆 ============ -->
+            <!-- ============ 首屏：夜 ============ -->
             <section
                 class="sec hero"
                 id="hero">
@@ -91,51 +187,86 @@
                     <img
                         class="avatar"
                         src="assets/avatar.jpg"
-                        alt="红旗之下" />
+                        alt="夜色中的灯" />
                     <div
                         class="halo-pulse"
                         aria-hidden="true"></div>
                     <span
-                        class="star-badge"
-                        aria-hidden="true">★</span>
+                        class="pumpkin-badge"
+                        aria-hidden="true">
+                        <svg viewBox="0 0 100 100">
+                            <path
+                                class="pk-stem"
+                                d="M50 32 C 48 25 43 21 37 20" />
+                            <ellipse
+                                cx="50"
+                                cy="60"
+                                rx="35"
+                                ry="30"
+                                fill="#FF8A30" />
+                            <ellipse
+                                cx="50"
+                                cy="60"
+                                rx="35"
+                                ry="30"
+                                fill="none"
+                                stroke="rgba(120,45,0,.34)"
+                                stroke-width="2" />
+                            <ellipse
+                                cx="50"
+                                cy="60"
+                                rx="17"
+                                ry="30"
+                                fill="none"
+                                stroke="rgba(120,45,0,.26)"
+                                stroke-width="2" />
+                            <path
+                                d="M34 54 L46 54 L40 45 Z"
+                                fill="#3A1600" />
+                            <path
+                                d="M66 54 L54 54 L60 45 Z"
+                                fill="#3A1600" />
+                            <path
+                                d="M34 68 L42 75 L50 68 L58 75 L66 68 L66 72 Q50 84 34 72 Z"
+                                fill="#3A1600" />
+                        </svg>
+                    </span>
                 </div>
 
                 <p
                     class="eyebrow reveal"
                     data-delay="1">
-                    NATIONAL DAY OF CHINA
+                    TRICK OR TREAT
                 </p>
                 <h1
                     class="hero-title reveal"
                     data-delay="2">
-                    盛世
-                    <span class="dot-accent">·</span>
-                    华诞
+                    <span>不给糖就捣蛋</span>
                 </h1>
                 <p
                     class="hero-date reveal"
                     data-delay="3">
-                    <span>1949 — 2026</span>
+                    <span>2026.11.01</span>
                     <i></i>
-                    <span>国庆</span>
+                    <span>万圣夜</span>
                 </p>
 
                 <p
                     class="hero-line reveal"
                     data-delay="4">
-                    五星闪耀，皆为信仰，
+                    提一盏南瓜灯，穿过十一月的第一场雾，
                     <br />
-                    目光所至，皆为华夏。
+                    今晚的鬼怪，都只负责可爱。
                 </p>
 
                 <div
                     class="code-card reveal"
                     data-delay="5">
-                    <div class="code-label">今日验证</div>
+                    <div class="code-label">今日暗号</div>
                     <div
                         class="code-value"
                         id="codeValue">
-                        261001
+                        111111
                     </div>
                     <button
                         class="copy-btn"
@@ -147,19 +278,19 @@
                 <div
                     class="scroll-cue reveal"
                     data-delay="6">
-                    <span>往下看</span>
+                    <span>敲敲门</span>
                     <i></i>
                 </div>
             </section>
 
-            <!-- ============ 愿 ============ -->
+            <!-- ============ 糖 ============ -->
             <section
                 class="sec letter"
                 id="letter">
                 <header class="sec-head reveal">
                     <span class="sec-no">01</span>
-                    <h2 class="sec-title">国庆寄语</h2>
-                    <p class="sec-desc">写在十月一日凌晨的一小段字</p>
+                    <h2 class="sec-title">夜半来信</h2>
+                    <p class="sec-desc">写在十一月一日凌晨的一小段字</p>
                 </header>
 
                 <article
@@ -167,61 +298,234 @@
                     data-delay="1">
                     <div class="paper-mark">&ldquo;</div>
                     <p>
-                        国庆快乐呀～又到了一年里的十月一，今天的验证码就在上面啦，不用大家扫码啦。
+                        万圣节快乐呀～又到了一年里最有借口吃糖的日子，暗号就在上面啦，不用敲门也能进来。
                     </p>
                     <p>
-                        从 1949 到今朝，这一路山河走得并不容易。我们生在红旗下，长在春风里，抬头是万里晴空，回首是万家灯火，所谓盛世，不过是有人替我们把路照亮了。
+                        今晚把一年的疲惫都交给路过的鬼怪带走，口袋记得留一点空位装糖。胆子大的可以去敲陌生人的门，胆子小的就留在灯下，听风从屋檐上跑过去。
                     </p>
                     <p>
-                        国是千万家，家是最小国，能被这片土地安稳地托着，与大家一齐奋进，是件很奢侈的事。感谢你们仍在这里！
+                        鬼故事都是编的，但愿你被夜晚温柔围住这件事，是真的。南瓜灯会一直亮着，蝙蝠只负责在月亮前面绕圈。
                     </p>
-                    <p>
-                        多的煽情就不说啦，愿从今以后山河无恙，人间皆安。
-                    </p>
+                    <p>不给糖就捣蛋——不过你来了，糖就先给你。</p>
                     <div class="paper-sign">
                         <span class="sign-label">四 季 · 映 姬</span>
-                        <span class="sign-code">十月一日</span>
+                        <span class="sign-code">十一月一日</span>
                     </div>
                 </article>
             </section>
 
-            <!-- ============ 国 ============ -->
+            <!-- ============ 门 ============ -->
             <section
-                class="sec reunion"
-                id="reunion">
+                class="sec door"
+                id="door">
                 <div class="mem-inner">
-                    <p class="mem-date reveal">一 九 四 九 · 十 · 一</p>
+                    <p class="mem-date reveal">十 一 月 · 一 日</p>
                     <h2
                         class="mem-title reveal"
                         data-delay="1">
-                        山河锦绣
+                        不给糖就捣蛋
                     </h2>
                     <div
                         class="mem-rule reveal"
                         data-delay="2"></div>
+
+                    <div
+                        class="jack-stage reveal"
+                        data-delay="2">
+                        <div
+                            class="jack reveal"
+                            id="jack">
+                            <svg
+                                viewBox="0 0 200 200"
+                                aria-hidden="true">
+                                <defs>
+                                    <radialGradient
+                                        id="pkGradBig"
+                                        cx="44%"
+                                        cy="32%"
+                                        r="74%">
+                                        <stop
+                                            offset="0%"
+                                            stop-color="#FFC061" />
+                                        <stop
+                                            offset="52%"
+                                            stop-color="#FF8A30" />
+                                        <stop
+                                            offset="100%"
+                                            stop-color="#B8440A" />
+                                    </radialGradient>
+                                    <filter
+                                        id="pkGlow"
+                                        x="-50%"
+                                        y="-50%"
+                                        width="200%"
+                                        height="200%">
+                                        <feGaussianBlur
+                                            stdDeviation="4"
+                                            result="b" />
+                                        <feMerge>
+                                            <feMergeNode in="b" />
+                                            <feMergeNode in="SourceGraphic" />
+                                        </feMerge>
+                                    </filter>
+                                </defs>
+                                <path
+                                    class="pk-stem"
+                                    d="M100 46 C 96 32 86 25 72 23" />
+                                <ellipse
+                                    cx="100"
+                                    cy="116"
+                                    rx="78"
+                                    ry="68"
+                                    fill="url(#pkGradBig)" />
+                                <ellipse
+                                    cx="100"
+                                    cy="116"
+                                    rx="52"
+                                    ry="68"
+                                    fill="none"
+                                    stroke="rgba(120,45,0,.3)"
+                                    stroke-width="3" />
+                                <ellipse
+                                    cx="100"
+                                    cy="116"
+                                    rx="26"
+                                    ry="68"
+                                    fill="none"
+                                    stroke="rgba(120,45,0,.22)"
+                                    stroke-width="3" />
+                                <ellipse
+                                    cx="100"
+                                    cy="116"
+                                    rx="78"
+                                    ry="68"
+                                    fill="none"
+                                    stroke="rgba(255,220,160,.3)"
+                                    stroke-width="2" />
+
+                                <!-- 平静表情：弯月眼 + 锯齿笑 -->
+                                <g class="pk-face pk-calm">
+                                    <path
+                                        class="pk-glow"
+                                        d="M56 92 Q 72 74 88 92"
+                                        fill="none"
+                                        stroke="#FFE07A"
+                                        stroke-width="9"
+                                        stroke-linecap="round" />
+                                    <path
+                                        class="pk-glow"
+                                        d="M112 92 Q 128 74 144 92"
+                                        fill="none"
+                                        stroke="#FFE07A"
+                                        stroke-width="9"
+                                        stroke-linecap="round" />
+                                    <path
+                                        class="pk-glow"
+                                        d="M60 132 Q 100 172 140 132 L128 132 L118 142 L108 132 L92 132 L82 142 L72 132 Z"
+                                        fill="#FFE07A" />
+                                </g>
+
+                                <!-- 惊吓表情：圆眼（瞳孔跟鼠标）+ 圆嘴 -->
+                                <g class="pk-face pk-scared">
+                                    <ellipse
+                                        cx="72"
+                                        cy="94"
+                                        rx="17"
+                                        ry="18"
+                                        fill="#FFE07A" />
+                                    <ellipse
+                                        cx="128"
+                                        cy="94"
+                                        rx="17"
+                                        ry="18"
+                                        fill="#FFE07A" />
+                                    <circle
+                                        class="pk-pupil"
+                                        cx="72"
+                                        cy="94"
+                                        r="7"
+                                        fill="#3A1600" />
+                                    <circle
+                                        class="pk-pupil"
+                                        cx="128"
+                                        cy="94"
+                                        r="7"
+                                        fill="#3A1600" />
+                                    <ellipse
+                                        cx="100"
+                                        cy="144"
+                                        rx="16"
+                                        ry="20"
+                                        fill="#FFE07A" />
+                                </g>
+                            </svg>
+                        </div>
+                        <p
+                            class="jack-hint reveal"
+                            data-delay="3"
+                            id="jackHint">
+                            它正看着你
+                        </p>
+                    </div>
+
+                    <div
+                        class="choice reveal"
+                        data-delay="4">
+                        <button
+                            class="candy-btn"
+                            id="treatBtn"
+                            type="button">
+                            <span class="btn-glow"></span>
+                            <span class="btn-label">给颗糖</span>
+                            <span class="btn-sub">TREAT</span>
+                        </button>
+                        <button
+                            class="trick-btn"
+                            id="trickBtn"
+                            type="button">
+                            <span class="btn-glow"></span>
+                            <span class="btn-label">捣蛋</span>
+                            <span class="btn-sub">TRICK</span>
+                        </button>
+                    </div>
+                    <p
+                        class="choice-note"
+                        id="choiceNote"
+                        aria-live="polite">
+                        选一个，今晚就按你的来。
+                    </p>
+
                     <p
                         class="mem-text reveal"
-                        data-delay="3">
-                        愿远行的人有归途，愿留下的人有锦绣。
+                        data-delay="5">
+                        愿今晚的鬼怪都只是可爱的南瓜，愿每一扇门后都备着糖。
                     </p>
                     <p
                         class="mem-text reveal"
-                        data-delay="4">
-                        红旗漫卷处，皆是人间好时节。愿每一盏亮着的灯下，都有一桌说不完的家常。
+                        data-delay="6">
+                        糖是甜的，捣蛋也是被允许的——
+                        <br />
+                        一年就这么一晚，胡闹一次不算过分。
                     </p>
                     <p
                         class="mem-honor reveal"
-                        data-delay="5">
-                        愿以吾辈之青春 · 捍卫盛世之中华
+                        data-delay="7">
+                        提灯夜行 · 无所畏惧
                     </p>
                 </div>
+
+                <!-- 万圣夜报：屏幕级事件反馈 -->
+                <div
+                    class="flash"
+                    id="flash"
+                    aria-hidden="true"></div>
             </section>
 
             <!-- ============ 页脚 ============ -->
             <footer class="foot">
                 <div class="foot-line"></div>
                 <p class="foot-main">四季·映姬　谨致</p>
-                <p class="foot-sub">2026.10.01 · 国庆</p>
+                <p class="foot-sub">2026.11.01 · 万圣夜</p>
             </footer>
         </main>
 

@@ -1,5 +1,5 @@
 /* ============================================================
-   国庆 · 盛世华诞 交互
+   万圣夜 · 不给糖就捣蛋 交互
    纯原生 JS，无依赖
    ============================================================ */
 (function () {
@@ -7,23 +7,22 @@
 
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    /* ---------- 进场撒金 ---------- */
+    /* ---------- 进场撒糖 ---------- */
     window.setTimeout(function () {
-        burst(window.innerWidth / 2, window.innerHeight * 0.4, 100);
+        burst(window.innerWidth / 2, window.innerHeight * 0.4, 90);
     }, 800);
 
-    /* ---------- 夜空：星子 + 烟花 + 落金 ---------- */
+    /* ---------- 夜空：星子 + 萤火 + 飘落糖屑 ---------- */
     var canvas = document.getElementById("sky");
     var ctx = canvas.getContext("2d");
     var stars = [];
-    var confetti = [];
-    var rockets = [];
-    var sparks = [];
+    var candies = [];
+    var embers = [];
     var w = 0,
         h = 0,
         dpr = 1,
         t = 0;
-    var fireTimer = 70;
+    var emberTimer = 40;
 
     function sizeCanvas() {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -33,106 +32,91 @@
         canvas.height = Math.floor(h * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         buildStars();
-        buildConfetti();
+        buildCandies();
     }
 
     function buildStars() {
         stars = [];
-        var count = Math.min(Math.round((w * h) / 10000), 170);
+        var count = Math.min(Math.round((w * h) / 11000), 150);
         for (var i = 0; i < count; i++) {
             stars.push({
                 x: Math.random() * w,
                 y: Math.random() * h * 0.85,
-                r: Math.random() * 1.45 + 0.3,
-                a: Math.random() * 0.6 + 0.16,
+                r: Math.random() * 1.3 + 0.3,
+                a: Math.random() * 0.5 + 0.14,
                 sp: Math.random() * 0.018 + 0.004,
-                ph: Math.random() * Math.PI * 2
+                ph: Math.random() * Math.PI * 2,
+                // 少数星子带一点幽绿/橙的信封色调
+                c: Math.random() < 0.16 ? "255,179,71" : Math.random() < 0.1 ? "142,240,176" : "244,233,216"
             });
         }
     }
 
-    function buildConfetti() {
-        confetti = [];
-        var count = Math.min(Math.round(w / 30), 38);
+    function buildCandies() {
+        candies = [];
+        var count = Math.min(Math.round(w / 34), 32);
         for (var i = 0; i < count; i++) {
-            confetti.push(makeConfetti(Math.random() * -h));
+            candies.push(makeCandy(Math.random() * -h));
         }
     }
 
-    function makeConfetti(y) {
-        var r = Math.random();
+    var CANDY_COLORS = ["#FF8A30", "#FFB347", "#F4E9D8", "#8EF0B0", "#C2333F", "#B38CFF"];
+
+    function makeCandy(y) {
         return {
             x: Math.random() * w,
             y: y,
-            r: Math.random() * 2.4 + 1.5,
-            vy: Math.random() * 0.34 + 0.15,
-            sway: Math.random() * 1.3 + 0.5,
+            r: Math.random() * 2.2 + 1.6,
+            vy: Math.random() * 0.32 + 0.13,
+            sway: Math.random() * 1.2 + 0.45,
             ph: Math.random() * Math.PI * 2,
             rot: Math.random() * Math.PI * 2,
-            vr: (Math.random() - 0.5) * 0.02,
-            a: Math.random() * 0.24 + 0.1,
-            c: r < 0.42 ? "#F6EFDF" : r < 0.74 ? "#E9B949" : "#E23B4E"
+            vr: (Math.random() - 0.5) * 0.014,
+            a: Math.random() * 0.22 + 0.08,
+            c: CANDY_COLORS[(Math.random() * CANDY_COLORS.length) | 0]
         };
     }
 
-    /* 一颗小金星 */
-    function drawStarShape(c, x, y, r, rot, color, alpha) {
+    /* 小糖粒：圆身 + 两侧糖纸尖角 */
+    function drawCandy(c, x, y, r, rot, color, alpha) {
         c.save();
         c.globalAlpha = alpha;
         c.translate(x, y);
         c.rotate(rot);
         c.fillStyle = color;
+        // 两侧糖纸
         c.beginPath();
-        for (var k = 0; k < 5; k++) {
-            var ao = -Math.PI / 2 + k * ((Math.PI * 2) / 5);
-            var ai = ao + Math.PI / 5;
-            var ox = Math.cos(ao) * r;
-            var oy = Math.sin(ao) * r;
-            var ix = Math.cos(ai) * r * 0.42;
-            var iy = Math.sin(ai) * r * 0.42;
-            if (k === 0) c.moveTo(ox, oy);
-            else c.lineTo(ox, oy);
-            c.lineTo(ix, iy);
-        }
+        c.moveTo(-r * 1.9, 0);
+        c.lineTo(-r * 1.05, -r * 0.7);
+        c.lineTo(-r * 1.05, r * 0.7);
         c.closePath();
+        c.fill();
+        c.beginPath();
+        c.moveTo(r * 1.9, 0);
+        c.lineTo(r * 1.05, -r * 0.7);
+        c.lineTo(r * 1.05, r * 0.7);
+        c.closePath();
+        c.fill();
+        // 糖身
+        c.beginPath();
+        c.arc(0, 0, r, 0, Math.PI * 2);
         c.fill();
         c.restore();
     }
 
-    var FIRE_COLORS = ["#E9B949", "#F7DE9B", "#E23B4E", "#FFB4A2", "#F6EFDF"];
-
-    function launchFirework() {
-        var targetY = h * (0.1 + Math.random() * 0.32);
-        var g = 0.12;
-        var dist = h + 8 - targetY;
-        rockets.push({
-            x: w * (0.12 + Math.random() * 0.76),
-            y: h + 8,
-            vx: (Math.random() - 0.5) * 0.7,
-            vy: -Math.sqrt(2 * g * dist),
-            g: g,
-            targetY: targetY,
-            c: FIRE_COLORS[(Math.random() * FIRE_COLORS.length) | 0]
+    /* 萤火：橙绿色小光点缓缓上浮 */
+    function spawnEmber() {
+        embers.push({
+            x: Math.random() * w,
+            y: h + 10,
+            vx: (Math.random() - 0.5) * 0.25,
+            vy: -(Math.random() * 0.42 + 0.16),
+            r: Math.random() * 1.8 + 0.9,
+            life: 1,
+            decay: Math.random() * 0.0026 + 0.0016,
+            ph: Math.random() * Math.PI * 2,
+            c: Math.random() < 0.6 ? "255,179,71" : "142,240,176"
         });
-    }
-
-    function explode(x, y, color) {
-        var n = 46 + ((Math.random() * 26) | 0);
-        for (var i = 0; i < n; i++) {
-            var ang = ((Math.PI * 2) / n) * i + Math.random() * 0.14;
-            var spd = Math.random() * 3.4 + 1.6;
-            sparks.push({
-                x: x,
-                y: y,
-                vx: Math.cos(ang) * spd,
-                vy: Math.sin(ang) * spd,
-                g: 0.028,
-                r: Math.random() * 1.5 + 0.9,
-                life: 1,
-                decay: Math.random() * 0.012 + 0.008,
-                c: Math.random() < 0.74 ? color : FIRE_COLORS[(Math.random() * FIRE_COLORS.length) | 0]
-            });
-        }
     }
 
     function drawSky() {
@@ -144,68 +128,55 @@
             var alpha = s.a * (0.55 + 0.45 * Math.sin(t * s.sp * 60 + s.ph));
             ctx.beginPath();
             ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(246,239,223," + alpha.toFixed(3) + ")";
+            ctx.fillStyle = "rgba(" + s.c + "," + alpha.toFixed(3) + ")";
             ctx.fill();
         }
 
-        // 烟花升空
-        for (var ri = rockets.length - 1; ri >= 0; ri--) {
-            var rk = rockets[ri];
-            rk.vy += rk.g;
-            rk.x += rk.vx;
-            rk.y += rk.vy;
-            ctx.globalAlpha = 0.9;
-            ctx.beginPath();
-            ctx.arc(rk.x, rk.y, 1.7, 0, Math.PI * 2);
-            ctx.fillStyle = rk.c;
-            ctx.fill();
-            ctx.globalAlpha = 1;
-            if (rk.vy >= 0 || rk.y <= rk.targetY) {
-                explode(rk.x, rk.y, rk.c);
-                rockets.splice(ri, 1);
-            }
-        }
-
-        // 烟花绽放
-        for (var si = sparks.length - 1; si >= 0; si--) {
-            var sp = sparks[si];
-            sp.vy += sp.g;
-            sp.vx *= 0.985;
-            sp.vy *= 0.985;
-            sp.x += sp.vx;
-            sp.y += sp.vy;
-            sp.life -= sp.decay;
-            if (sp.life <= 0) {
-                sparks.splice(si, 1);
+        // 萤火
+        for (var ei = embers.length - 1; ei >= 0; ei--) {
+            var em = embers[ei];
+            em.ph += 0.05;
+            em.x += em.vx + Math.sin(em.ph) * 0.22;
+            em.y += em.vy;
+            em.life -= em.decay;
+            if (em.life <= 0 || em.y < -20) {
+                embers.splice(ei, 1);
                 continue;
             }
-            ctx.globalAlpha = Math.max(sp.life, 0);
+            var pulse = 0.6 + 0.4 * Math.sin(em.ph * 1.6);
+            ctx.globalAlpha = Math.max(em.life * pulse, 0);
             ctx.beginPath();
-            ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
-            ctx.fillStyle = sp.c;
+            ctx.arc(em.x, em.y, em.r, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(" + em.c + ",.9)";
+            ctx.fill();
+            // 柔光
+            ctx.globalAlpha = Math.max(em.life * pulse * 0.25, 0);
+            ctx.beginPath();
+            ctx.arc(em.x, em.y, em.r * 4, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(" + em.c + ",.28)";
             ctx.fill();
         }
         ctx.globalAlpha = 1;
 
-        // 落金
-        for (var j = 0; j < confetti.length; j++) {
-            var p = confetti[j];
+        // 飘糖
+        for (var j = 0; j < candies.length; j++) {
+            var p = candies[j];
             p.y += p.vy;
             p.ph += 0.014;
             p.x += Math.sin(p.ph) * p.sway * 0.35;
             p.rot += p.vr;
             if (p.y - 20 > h) {
-                confetti[j] = makeConfetti(-20);
+                candies[j] = makeCandy(-20);
             }
-            drawStarShape(ctx, p.x, p.y, p.r, p.rot, p.c, p.a);
+            drawCandy(ctx, p.x, p.y, p.r, p.rot, p.c, p.a);
         }
 
-        // 定时发射
-        fireTimer -= 1;
-        if (fireTimer <= 0) {
-            launchFirework();
-            if (Math.random() < 0.34) launchFirework();
-            fireTimer = 96 + ((Math.random() * 120) | 0);
+        // 定时生萤火
+        emberTimer -= 1;
+        if (emberTimer <= 0) {
+            spawnEmber();
+            if (Math.random() < 0.4) spawnEmber();
+            emberTimer = 30 + ((Math.random() * 50) | 0);
         }
 
         t += 1;
@@ -216,16 +187,16 @@
     if (!reduced) {
         drawSky();
     } else {
-        // 静态帧：画出星子与落金，不留空
+        // 静态帧
         for (var si2 = 0; si2 < stars.length; si2++) {
             ctx.beginPath();
             ctx.arc(stars[si2].x, stars[si2].y, stars[si2].r, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(246,239,223," + stars[si2].a + ")";
+            ctx.fillStyle = "rgba(" + stars[si2].c + "," + stars[si2].a + ")";
             ctx.fill();
         }
-        for (var pi = 0; pi < confetti.length; pi++) {
-            var pp = confetti[pi];
-            drawStarShape(ctx, pp.x, pp.y, pp.r, pp.rot, pp.c, pp.a);
+        for (var pi = 0; pi < candies.length; pi++) {
+            var pp = candies[pi];
+            drawCandy(ctx, pp.x, pp.y, pp.r, pp.rot, pp.c, pp.a);
         }
     }
     window.addEventListener("resize", sizeCanvas);
@@ -258,9 +229,9 @@
         });
     }
 
-    /* ---------- 阅读进度 · 导航高亮 · 华光升起 ---------- */
+    /* ---------- 阅读进度 · 导航高亮 · 月光升起 ---------- */
     var readBar = document.getElementById("readBar");
-    var halo = document.querySelector(".star-halo");
+    var halo = document.querySelector(".moon-halo");
     var dots = Array.prototype.slice.call(document.querySelectorAll(".dot"));
     var sections = dots.map(function (d) {
         return document.getElementById(d.getAttribute("data-target"));
@@ -271,9 +242,8 @@
         var p = max > 0 ? window.scrollY / max : 0;
         readBar.style.width = (p * 100).toFixed(2) + "%";
 
-        // 华光随阅读缓缓升起、渐近（减弱动效时保持静止）
         if (halo && !reduced) {
-            halo.style.setProperty("--moon-y", (-p * window.innerHeight * 0.3).toFixed(1) + "px");
+            halo.style.setProperty("--moon-y", (-p * window.innerHeight * 0.26).toFixed(1) + "px");
             halo.style.setProperty("--moon-scale", (1 + p * 0.14).toFixed(3));
         }
 
@@ -297,7 +267,7 @@
         });
     });
 
-    /* ---------- 口令复制 ---------- */
+    /* ---------- 暗号复制 ---------- */
     var copyBtn = document.getElementById("copyCode");
     var codeValue = document.getElementById("codeValue");
 
@@ -335,7 +305,195 @@
         }
     });
 
-    /* ---------- 金屑迸发 ---------- */
+    /* ---------- 南瓜灯：视线跟随 ---------- */
+    var jack = document.getElementById("jack");
+    var jackHint = document.getElementById("jackHint");
+    var pupils = jack ? jack.querySelectorAll(".pk-pupil") : [];
+    var PUPIL_MAX = 7;
+
+    function aimPupils(clientX, clientY) {
+        if (!jack || !pupils.length || reduced) return;
+        var r = jack.getBoundingClientRect();
+        var cx = r.left + r.width / 2;
+        var cy = r.top + r.height / 2;
+        var dx = clientX - cx;
+        var dy = clientY - cy;
+        var len = Math.sqrt(dx * dx + dy * dy) || 1;
+        // 眼珠最多偏移 PUPIL_MAX 个单位（SVG 坐标系）
+        var k = Math.min(len / 260, 1) * PUPIL_MAX;
+        var ox = (dx / len) * k;
+        var oy = (dy / len) * k;
+        var tr = "translate(" + ox.toFixed(2) + "," + oy.toFixed(2) + ")";
+        for (var i = 0; i < pupils.length; i++) {
+            pupils[i].style.transform = tr;
+        }
+    }
+
+    if (jack && pupils.length) {
+        window.addEventListener(
+            "pointermove",
+            function (e) {
+                aimPupils(e.clientX, e.clientY);
+            },
+            { passive: true }
+        );
+    }
+
+    /* ---------- 门：给糖 / 捣蛋 双选 ---------- */
+    var treatBtn = document.getElementById("treatBtn");
+    var trickBtn = document.getElementById("trickBtn");
+    var choiceNote = document.getElementById("choiceNote");
+    var door = document.getElementById("door");
+    var flash = document.getElementById("flash");
+
+    var trickCount = 0;
+    var busy = false;
+
+    var HINTS = {
+        idle: "它正看着你",
+        treat: "南瓜灯笑了，眼睛弯成了月牙",
+        trick: "南瓜灯瞪圆了眼——它害怕了",
+        finale: "连捣三次蛋，只好把糖全交出来了"
+    };
+
+    function setFace(scared) {
+        if (!jack) return;
+        jack.classList.toggle("is-scared", scared);
+    }
+
+    function setHint(text) {
+        if (jackHint) jackHint.textContent = text;
+    }
+
+    function setNote(text, mood) {
+        if (!choiceNote) return;
+        choiceNote.textContent = text;
+        choiceNote.classList.remove("is-happy", "is-spooky");
+        if (mood === "happy") choiceNote.classList.add("is-happy");
+        if (mood === "spooky") choiceNote.classList.add("is-spooky");
+    }
+
+    function fireFlash(spooky) {
+        if (!flash || reduced) return;
+        flash.classList.toggle("spooky", !!spooky);
+        flash.classList.remove("fire");
+        // 强制回流，让动画可以连续触发
+        void flash.offsetWidth;
+        flash.classList.add("fire");
+    }
+
+    function jackCenter() {
+        var r = jack.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height * 0.55 };
+    }
+
+    /* 捣蛋：蝙蝠群从门里炸出来 */
+    function batSwarm(count) {
+        if (!door || reduced) return;
+        var r = door.getBoundingClientRect();
+        var originX = r.left + r.width / 2;
+        var originY = r.top + r.height * 0.5;
+
+        for (var i = 0; i < count; i++) {
+            (function (idx) {
+                var el = document.createElement("span");
+                el.className = "swarm-bat";
+                var ang = -Math.PI / 2 + (Math.random() - 0.5) * 2.6;
+                var dist = 120 + Math.random() * Math.min(r.width * 0.44, 420);
+                var dx = Math.cos(ang) * dist;
+                var dy = Math.sin(ang) * dist * 0.8;
+                el.style.left = originX + "px";
+                el.style.top = originY + "px";
+                el.style.setProperty("--dx", dx.toFixed(0) + "px");
+                el.style.setProperty("--dy", dy.toFixed(0) + "px");
+                el.style.setProperty("--rot", ((Math.random() - 0.5) * 70).toFixed(0) + "deg");
+                el.style.setProperty("--dur", (0.9 + Math.random() * 0.7).toFixed(2) + "s");
+                el.style.setProperty("--delay", (idx * 0.035).toFixed(2) + "s");
+                el.style.setProperty("--scale", (0.6 + Math.random() * 0.8).toFixed(2));
+                document.body.appendChild(el);
+                window.setTimeout(function () {
+                    if (el.parentNode) el.parentNode.removeChild(el);
+                }, 2200);
+            })(i);
+        }
+    }
+
+    function onTreat() {
+        if (busy) return;
+        busy = true;
+        setFace(false);
+        setHint(HINTS.treat);
+        setNote(
+            "糖接住了。南瓜灯眯起眼笑，连蝙蝠都停在了半空。",
+            "happy"
+        );
+        var c = jackCenter();
+        burst(c.x, c.y, 72);
+        fireFlash(false);
+        if (pupils.length) {
+            // 开心时眼珠回到正中偏下
+            for (var i = 0; i < pupils.length; i++) {
+                pupils[i].style.transform = "translate(0,2)";
+            }
+        }
+        window.setTimeout(function () {
+            busy = false;
+        }, 620);
+    }
+
+    function onTrick() {
+        if (busy) return;
+        busy = true;
+        trickCount += 1;
+        setFace(true);
+        var c = jackCenter();
+        burst(c.x, c.y, 34);
+        fireFlash(true);
+        batSwarm(9 + Math.min(trickCount, 4) * 3);
+
+        if (door) {
+            door.classList.remove("shake");
+            void door.offsetWidth;
+            door.classList.add("shake");
+            window.setTimeout(function () {
+                door.classList.remove("shake");
+            }, 560);
+        }
+
+        if (trickCount >= 3) {
+            setHint(HINTS.finale);
+            setNote(
+                "捣蛋成功。南瓜灯举手投降——糖全给你，蝙蝠归你管，今晚归你。",
+                "spooky"
+            );
+            window.setTimeout(function () {
+                burst(c.x, c.y, 90);
+                fireFlash(false);
+            }, 240);
+        } else {
+            setHint(HINTS.trick);
+            setNote(
+                "蝙蝠从门里扑了出来，绕着你转了两圈，又飞走了。",
+                "spooky"
+            );
+        }
+
+        window.setTimeout(function () {
+            busy = false;
+        }, 700);
+    }
+
+    if (treatBtn) treatBtn.addEventListener("click", onTreat);
+    if (trickBtn) trickBtn.addEventListener("click", onTrick);
+
+    // 鼠标离开窗口后眼珠回正
+    window.addEventListener("pointerleave", function () {
+        for (var i = 0; i < pupils.length; i++) {
+            pupils[i].style.transform = "translate(0,0)";
+        }
+    });
+
+    /* ---------- 糖雨画布 ---------- */
     var cc = document.getElementById("petals");
     var cx = cc.getContext("2d");
     var parts = [];
@@ -350,24 +508,22 @@
     sizePetals();
     window.addEventListener("resize", sizePetals);
 
-    var COLORS = ["#E9B949", "#F7DE9B", "#F6EFDF", "#E23B4E", "#C8102E"];
-
     function burst(x, y, n) {
         if (reduced) return;
         var d = Math.min(window.devicePixelRatio || 1, 2);
         for (var i = 0; i < n; i++) {
             var ang = Math.random() * Math.PI * 2;
-            var spd = Math.random() * 5.8 + 1.6;
+            var spd = Math.random() * 5.6 + 1.5;
             parts.push({
                 x: x * d,
                 y: y * d,
                 vx: Math.cos(ang) * spd,
                 vy: Math.sin(ang) * spd - 2.6,
                 g: 0.17,
-                r: (Math.random() * 3.4 + 1.8) * d,
+                r: (Math.random() * 2.6 + 1.6) * d,
                 rot: Math.random() * Math.PI,
-                vr: (Math.random() - 0.5) * 0.22,
-                c: COLORS[(Math.random() * COLORS.length) | 0],
+                vr: (Math.random() - 0.5) * 0.2,
+                c: CANDY_COLORS[(Math.random() * CANDY_COLORS.length) | 0],
                 life: 1
             });
         }
@@ -387,14 +543,14 @@
             p.x += p.vx;
             p.y += p.vy;
             p.rot += p.vr;
-            p.life -= 0.0072;
+            p.life -= 0.0074;
 
             if (p.life <= 0 || p.y > cc.height + 60) {
                 parts.splice(i, 1);
                 continue;
             }
 
-            drawStarShape(cx, p.x, p.y, Math.max(p.r, 0.5), p.rot, p.c, Math.max(p.life, 0));
+            drawCandy(cx, p.x, p.y, Math.max(p.r, 0.6), p.rot, p.c, Math.max(p.life, 0));
         }
 
         if (parts.length) {
@@ -405,7 +561,7 @@
         }
     }
 
-    /* ---------- 页面隐藏时停掉迸发 ---------- */
+    /* ---------- 页面隐藏时停掉动画 ---------- */
     document.addEventListener("visibilitychange", function () {
         if (document.hidden) {
             parts.length = 0;
